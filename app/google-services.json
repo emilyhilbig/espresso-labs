@@ -1,0 +1,59 @@
+{
+  "project_info": {
+    "project_number": "891321940555",
+    "firebase_url": "https://el-meala.firebaseio.com",
+    "project_id": "el-meala",
+    "storage_bucket": "el-meala.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:891321940555:android:4ddcab04104ee3c6",
+        "android_client_info": {
+          "package_name": "espressolabs.meala"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "891321940555-efrltql3leolf9dcranfrijmtvtq1fom.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "espressolabs.meala",
+            "certificate_hash": "698fd640bbf4a20371212528e97043e5d8ca41a8"
+          }
+        },
+        {
+          "client_id": "891321940555-03chmec6okp02nsqnip40881r56vtqsp.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "891321940555-03chmec6okp02nsqnip40881r56vtqsp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDKJ4zbGxPxx1Y8LWddD7yD0XhRc305N00"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "891321940555-03chmec6okp02nsqnip40881r56vtqsp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
