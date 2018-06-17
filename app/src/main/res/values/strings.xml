@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">MealA</string>
     <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="title_planner">Planner</string>
+    <string name="title_recipe">Recipe</string>
+    <string name="title_grocery">Grocery</string>
 </resources>
