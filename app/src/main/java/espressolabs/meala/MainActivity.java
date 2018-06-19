@@ -54,7 +54,6 @@ public class MainActivity extends AppCompatActivity
         bottomNav.setOnNavigationItemSelectedListener(navListener);
         BottomNavigationViewHelper.removeShiftMode(bottomNav);
 
-
         //I added this if statement to keep the selected fragment when rotating the device
         if (savedInstanceState == null) {
             setFragment(new HomeFragment());

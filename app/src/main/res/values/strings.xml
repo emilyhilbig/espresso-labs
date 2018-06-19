@@ -4,4 +4,8 @@
     <string name="title_planner">Planner</string>
     <string name="title_recipe">Recipe</string>
     <string name="title_grocery">Grocery</string>
+
+    <string name="title_activity_scanner">ScannerActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
 </resources>
