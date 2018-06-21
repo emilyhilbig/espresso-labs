@@ -1,19 +1,24 @@
 package espressolabs.meala;
 
 import android.annotation.SuppressLint;
-import android.support.v4.app.Fragment;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.internal.BottomNavigationItemView;
 import android.support.design.internal.BottomNavigationMenuView;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
 
 import java.lang.reflect.Field;
 
-import espressolabs.meala.dummy.DummyContent;
+import espressolabs.meala.dialog.ItemDialogFragment;
+import espressolabs.meala.dialog.NameDialogFragment;
+import espressolabs.meala.model.RecipeContent;
 
 
 class BottomNavigationViewHelper {
@@ -43,57 +48,114 @@ class BottomNavigationViewHelper {
 
 
 public class MainActivity extends AppCompatActivity
-        implements RecipeFragment.OnListFragmentInteractionListener {
+        implements RecipeListFragment.OnRecipeClickListener, NameDialogFragment.NameDialogListener, ItemDialogFragment.ItemDialogListener{
+
+    Fragment mCurFragment;
+    Fragment mPrevFragment;
+
+    FragmentManager fragmentManager;
+
+    Fragment homeFragment;
+    Fragment plannerFragment;
+    Fragment recipesFragment;
+    Fragment groceryFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
 
+        // Set up bottom nav
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
         bottomNav.setOnNavigationItemSelectedListener(navListener);
         BottomNavigationViewHelper.removeShiftMode(bottomNav);
 
+        fragmentManager = getSupportFragmentManager();
 
-        //I added this if statement to keep the selected fragment when rotating the device
-        if (savedInstanceState == null) {
-            setFragment(new HomeFragment());
-        }
+        // Create fragments
+        homeFragment = new HomeFragment();
+        plannerFragment = new PlannerFragment();
+        recipesFragment = new RecipeFragment();
+        groceryFragment = new GroceryFragment();
+
+        // Start with homeFragment
+        fragmentManager.beginTransaction().add(R.id.fragment_container, homeFragment).commit();
+        mCurFragment = homeFragment;
     }
 
-    private BottomNavigationView.OnNavigationItemSelectedListener navListener =
+
+    private final BottomNavigationView.OnNavigationItemSelectedListener navListener =
             new BottomNavigationView.OnNavigationItemSelectedListener() {
                 @Override
                 public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                    Fragment selectedFragment = null;
-                    // TODO: could create these in onCreate
+                    mPrevFragment = mCurFragment;
+
                     switch (item.getItemId()) {
                         case R.id.navigation_home:
-                            selectedFragment = new HomeFragment();
+                            mCurFragment = homeFragment;
                             break;
                         case R.id.navigation_planner:
-                            selectedFragment = new PlannerFragment();
+                            mCurFragment = plannerFragment;
                             break;
                         case R.id.navigation_recipes:
-                            selectedFragment = new RecipeFragment();
+                            mCurFragment = recipesFragment;
                             break;
                         case R.id.navigation_grocery:
-                            selectedFragment = new GroceryFragment();
+                            mCurFragment = groceryFragment;
                             break;
                     }
 
-                    setFragment(selectedFragment);
+                    // Check if fragment was added previously
+                    if(mCurFragment.getId() != 0 && fragmentManager.findFragmentById(mCurFragment.getId()) != null) {
+                        // Check if one fragment was added previously
+                        if(mPrevFragment != null) {
+                            fragmentManager.beginTransaction().hide(mPrevFragment).show(mCurFragment).commit();
+                        } else {
+                            fragmentManager.beginTransaction().show(mCurFragment).commit();
+                        }
+                    } else {
+                        // Check if one fragment was added previously
+                        if(mPrevFragment != null) {
+                            fragmentManager.beginTransaction().add(R.id.fragment_container, mCurFragment).hide(mPrevFragment).commit();
+                        } else {
+                            fragmentManager.beginTransaction().add(R.id.fragment_container, mCurFragment).commit();
+                        }
+                    }
+
+                    setTitle(item.getTitle());
 
                     return true;
                 }
             };
 
-    private void setFragment(Fragment fragment) {
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                fragment).commit();
+
+    // Listeners
+
+    @Override
+    public void onListFragmentInteraction(RecipeContent.Recipe recipe) {
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(recipe.link));
+        startActivity(browserIntent);
     }
 
-    public void onListFragmentInteraction(DummyContent.DummyItem dummyItem) {
-        Log.d("myTag", "Clicked recipe item");
+
+    @Override
+    public void onDialogAddItem(String inputName, String inputDescription, int inputPrice, boolean inputUrgent) {
+        String itemName = inputName.trim();
+        String itemDescription = inputDescription.trim();
+
+        if (itemName.length() > 0) {
+            ((GroceryFragment)groceryFragment).shoppingListFragment.createItem(itemName, itemDescription, inputPrice, inputUrgent);
+        }
     }
+
+    @Override
+    public void onDialogChangeName(String input) {
+        String name = input.trim();
+
+        if (name.length() > 0) {
+            ((GroceryFragment)groceryFragment).shoppingListFragment.changeName(name);
+        }
+    }
+
 }
