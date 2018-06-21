@@ -85,7 +85,7 @@ public class RecipeRecyclerViewAdapter extends RecyclerView.Adapter<RecipeRecycl
             super(itemView);
             AppCompatImageButton fav_button = itemView.findViewById(R.id.favorite_button);
             AppCompatImageButton sl_button = itemView.findViewById(R.id.shortlist_button);
-            AppCompatImageButton pln_button = itemView.findViewById(R.id.planner_button);
+            AppCompatImageButton pln_button = itemView.findViewById(R.id.confirm_button);
             if (fav_button != null) {fav_button.setOnClickListener(this);}
             if (sl_button != null) {sl_button.setOnClickListener(this);}
             if (pln_button != null) {pln_button.setOnClickListener(this);}
@@ -114,7 +114,7 @@ public class RecipeRecyclerViewAdapter extends RecyclerView.Adapter<RecipeRecycl
                 case R.id.shortlist_button:
                     Toast.makeText(view.getContext(), verb + "shortlist!", Toast.LENGTH_SHORT).show();
                     break;
-                case R.id.planner_button:
+                case R.id.confirm_button:
                     Snackbar.make(view, verb + "planner!", Snackbar.LENGTH_SHORT)
                             .setAction("Action", null).show();
                     break;
