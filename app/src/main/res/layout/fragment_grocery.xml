@@ -1,25 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/coordinator"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".GroceryFragment">
+    android:layout_height="match_parent">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <include layout="@layout/app_bar"/>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewpager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Grocery fragment" />
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/button_openScanner"
+        android:id="@+id/fab_add"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:clickable="true"
         android:layout_gravity="bottom|end"
-        android:layout_margin="8dp"
-        android:elevation="5dp"
-        android:src="@drawable/ic_scanner" />
+        android:layout_margin="@dimen/fab_margin"
+        android:tint="@color/colorAccent"
+        app:backgroundTint="@android:color/white"
+        app:elevation="@dimen/fab_elevation"
+        app:srcCompat="@drawable/ic_add_black_24dp" />
 
-</FrameLayout>
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_scan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_margin="@dimen/fab_margin"
+        android:src="@drawable/ic_scanner"
+        android:tint="@color/colorAccent"
+        android:visibility="gone"
+        app:elevation="@dimen/fab_elevation"
+        app:backgroundTint="@android:color/white" />
+
+</android.support.design.widget.CoordinatorLayout>
+
+
