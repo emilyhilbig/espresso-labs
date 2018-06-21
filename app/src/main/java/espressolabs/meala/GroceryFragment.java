@@ -1,10 +1,10 @@
 package espressolabs.meala;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -94,9 +95,8 @@ public class GroceryFragment extends Fragment {
         fabScan = view.findViewById(R.id.fab_scan);
 
         // FAB listeners
-        fabAdd.setOnClickListener(view12 -> shoppingListFragment.openAddItemDialog());
-        fabScan.setOnClickListener(view1 -> Snackbar.make(view1, "Opening scannner", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show());
+        fabAdd.setOnClickListener(v -> shoppingListFragment.openAddItemDialog());
+        fabScan.setOnClickListener(v -> openScanner(v));
 
         return view;
     }
@@ -107,6 +107,12 @@ public class GroceryFragment extends Fragment {
         adapter.addFragment(shoppingListFragment, "Shopping List");
         adapter.addFragment(new PantryFragment(), "Pantry");
         viewPager.setAdapter(adapter);
+    }
+
+    public void openScanner(View view){
+        Toast.makeText(getContext(), "Opening scanner", Toast.LENGTH_LONG).show();
+        Intent intent = new Intent(getContext(), ScannerActivity.class);
+        startActivity(intent);
     }
 
     static class Adapter extends FragmentPagerAdapter {

@@ -5,7 +5,6 @@
     <string name="title_recipe">Recipe</string>
     <string name="title_grocery">Grocery</string>
 
-
     <string name="hint_item_price">Price</string>
     <string name="hint_item_description">Description</string>
     <string name="hint_item_urgent">Urgent</string>
@@ -43,4 +42,7 @@
     <string name="shopping_list_item_price_cozy">%1$s</string>
 
     <string name="fcm_server_key">AAAAz4bteks:APA91bGLKsnvB34CS_09zx7qSWGFuQIn3wLu5Ly0ptTdJOpRgWSio_grjoBC10IkmWlWGhAM9o2SUeoX5NyDjWuX3R9PRz1RnylhRhVWUJtbkA3sFgR5TvHGK3rhQteedX8gzaSOYiX</string>
+
+    <string name="title_activity_scanner">ScannerActivity</string>
+
 </resources>
