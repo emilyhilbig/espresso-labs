@@ -306,8 +306,8 @@ public class PlanningListFragment extends Fragment {
                 newView.animate().alpha(1).setDuration(duration).setInterpolator(interpolator).setListener(null).start();
 
                 if (newState == STATE_EMPTY) {
-                    View icon = view.findViewById(R.id.empty_shopping_list_icon);
-                    View text = view.findViewById(R.id.empty_shopping_list_text);
+                    View icon = view.findViewById(R.id.empty_planning_list_icon);
+                    View text = view.findViewById(R.id.empty_planning_list_text);
 
                     icon.setRotation(0);
                     icon.setTranslationX(-2000);

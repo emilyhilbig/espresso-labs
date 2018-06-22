@@ -40,7 +40,7 @@ public class PlanListItem {
 
     @Override
     public String toString() {
-        return "ShoppingListItem{" +
+        return "PlanListItem{" +
                 "key='" + key + '\'' +
                 ", createdBy='" + createdBy + '\'' +
                 ", status='" + status + '\'' +
