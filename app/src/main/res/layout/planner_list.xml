@@ -73,6 +73,20 @@
             app:layout_constraintEnd_toEndOf="@+id/loading_planning_list_progress"
             app:layout_constraintStart_toStartOf="@+id/loading_planning_list_progress"
             app:layout_constraintTop_toBottomOf="@+id/loading_planning_list_progress" />
+
+        <TextView
+            android:id="@+id/planner_list_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+            android:textColor="@color/medium_grey"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/loading_planning_list_text"
+            app:layout_constraintStart_toStartOf="@+id/loading_planning_list_text"
+            app:layout_constraintTop_toBottomOf="@+id/loading_planning_list_text" />
+
     </android.support.constraint.ConstraintLayout>
+
 
 </FrameLayout>

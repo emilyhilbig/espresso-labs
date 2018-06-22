@@ -24,6 +24,7 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.view.animation.OvershootInterpolator;
+import android.widget.TextView;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -58,6 +59,7 @@ public class PlanningListFragment extends Fragment {
     public static final String TAG = "PlanningListFragment";
     private PlanningListAdapter adapter;
     private RecyclerView listView;
+    private int day;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -69,7 +71,14 @@ public class PlanningListFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.planner_list, null);
+        View view = inflater.inflate(R.layout.planner_list, null);
+        Bundle args = getArguments();
+        day = args.getInt("day");
+        String dayText = Integer.toString(day);
+        ((TextView) view.findViewById(R.id.planner_list_title)).setText(dayText);
+
+        return view;
+
     }
 
     @Override
@@ -106,6 +115,7 @@ public class PlanningListFragment extends Fragment {
             }
 
             private void updateUI() {
+
             }
         });
     }

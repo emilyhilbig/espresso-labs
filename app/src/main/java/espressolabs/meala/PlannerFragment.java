@@ -34,9 +34,11 @@ import espressolabs.meala.PlanningListFragment;
  */
 public class PlannerFragment extends Fragment {
     private FloatingActionButton fabAdd;
+    private int selectedDay;
 
     public PlannerFragment() {
         // Required empty public constructor
+        selectedDay = 20180626;
     }
 
     @Override
@@ -62,6 +64,9 @@ public class PlannerFragment extends Fragment {
 
         // Set up calendar
         MaterialCalendarView calendar = view.findViewById(R.id.calendarView);
+        if (calendar != null) {
+            selectedDay = calendar.getCurrentDate().hashCode();
+        }
 
         // Setting ViewPager for each Tabs
         ViewPager viewPager = view.findViewById(R.id.viewpager);
@@ -72,18 +77,21 @@ public class PlannerFragment extends Fragment {
         calendar.setOnDateChangedListener(new OnDateSelectedListener() {
             @Override
             public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
-                viewPager.setCurrentItem(date.getDay());
+                selectedDay = date.hashCode();
+                viewPager.setCurrentItem(selectedDay/31);
             }
         });
 
         fabAdd = view.findViewById(R.id.fab_add_plan);
-        fabAdd.setOnClickListener(v -> Toast.makeText(getContext(), "Click", Toast.LENGTH_SHORT).show());
+        fabAdd.setOnClickListener(v ->
+            Toast.makeText(getContext(),  Integer.toString(selectedDay), Toast.LENGTH_SHORT).show()
+        );
 
         return view;
     }
 
     private void setupViewPager(ViewPager viewPager) {
-        Adapter adapter = new Adapter(getChildFragmentManager());
+        Adapter adapter = new PlannerFragment.Adapter(getChildFragmentManager());
         viewPager.setAdapter(adapter);
     }
 
@@ -94,9 +102,10 @@ public class PlannerFragment extends Fragment {
         }
 
         @Override
-        public Fragment getItem(int position) {
+        public Fragment getItem(int day) {
             Fragment fragment = new PlanningListFragment();
             Bundle args = new Bundle();
+            args.putInt("day", day);
             fragment.setArguments(args);
 
             return fragment;
@@ -104,7 +113,7 @@ public class PlannerFragment extends Fragment {
 
         @Override
         public int getCount() {
-            return 7;
+            return 31;
         }
 
         @Override
