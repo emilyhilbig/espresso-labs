@@ -85,7 +85,7 @@ public class PlanningListFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.shopping_list, null);
+        return inflater.inflate(R.layout.planner_list, null);
     }
 
     @Override
@@ -93,7 +93,7 @@ public class PlanningListFragment extends Fragment {
         Context context = getContext();
 
         // Setup RecyclerView
-        listView = view.findViewById(R.id.shopping_list);
+        listView = view.findViewById(R.id.planner_list);
         listView.setLayoutManager(new LinearLayoutManager(context));
 
         // Initializations
@@ -274,7 +274,7 @@ public class PlanningListFragment extends Fragment {
         View[] views = new View[]{
                 view.findViewById(R.id.loading_shopping_list),
                 view.findViewById(R.id.empty_shopping_list),
-                view.findViewById(R.id.shopping_list)
+                view.findViewById(R.id.planner_list)
         };
 
         int oldState = this.state;
