@@ -31,12 +31,6 @@ import espressolabs.meala.PlanningListFragment;
  * create an instance of this fragment.
  */
 public class PlannerFragment extends Fragment {
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-
     public PlannerFragment() {
         // Required empty public constructor
     }
@@ -87,8 +81,6 @@ public class PlannerFragment extends Fragment {
     }
 
     static class Adapter extends FragmentStatePagerAdapter {
-        private final List<Fragment> mFragmentList = new ArrayList<>();
-        private final List<String> mFragmentTitleList = new ArrayList<>();
 
         public Adapter(FragmentManager manager) {
             super(manager);
@@ -105,17 +97,12 @@ public class PlannerFragment extends Fragment {
 
         @Override
         public int getCount() {
-            return mFragmentList.size();
-        }
-
-        public void addFragment(Fragment fragment, String title) {
-            mFragmentList.add(fragment);
-            mFragmentTitleList.add(title);
+            return 7;
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
-            return mFragmentTitleList.get(position);
+            return "Day " + position;
         }
     }
 

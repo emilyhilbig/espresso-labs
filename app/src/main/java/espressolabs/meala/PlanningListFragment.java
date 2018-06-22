@@ -55,7 +55,7 @@ import espressolabs.meala.utils.FCMHelper;
  */
 public class PlanningListFragment extends Fragment {
 
-    public static final String TAG = "ShoppingListFragment";
+    public static final String TAG = "PlanningListFragment";
     private static final int STATE_STARTING = -1;
     private static final int STATE_LOADING = 0;
     private static final int STATE_EMPTY = 1;
