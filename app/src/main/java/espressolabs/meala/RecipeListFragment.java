@@ -45,6 +45,10 @@ public class RecipeListFragment extends Fragment implements SwipeRefreshLayout.O
     private final String URL_DATA = "http://food2fork.com/api/search?key=b5dcbe5da1e613679d57211a729e279e";
     private List<Recipe> trendingRecipes;
     private RecipeRecyclerViewAdapter adapter;
+    private static final String ARG_COLUMN_COUNT = "column-count";
+
+    private int mColumnCount = 1;
+    private OnRecipeClickListener mListener;
 
     private void loadUrlData() {
 //        final ProgressDialog progressDialog = new ProgressDialog(getContext());
@@ -95,11 +99,6 @@ public class RecipeListFragment extends Fragment implements SwipeRefreshLayout.O
         trendingRecipes = new ArrayList<>();
 
     }
-
-    private static final String ARG_COLUMN_COUNT = "column-count";
-
-    private int mColumnCount = 1;
-    private OnRecipeClickListener mListener;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
