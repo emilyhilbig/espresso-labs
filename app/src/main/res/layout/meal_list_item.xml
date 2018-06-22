@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/meal_list_item"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginEnd="@dimen/list_item_right_margin"
+    android:layout_marginStart="@dimen/list_item_left_margin"
+
+    android:background="?android:colorBackground"
+    android:orientation="vertical"
+    android:outlineProvider="none"
+    android:paddingTop="14dp">
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="?android:listPreferredItemPaddingLeft"
+        android:paddingEnd="?android:listPreferredItemPaddingRight">
+
+        <TextView
+            android:id="@+id/meal_list_item_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:ellipsize="end"
+            android:fontFamily="sans-serif"
+            android:lines="1"
+            android:textColor="@color/medium_grey"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toStartOf="@+id/meal_list_item_description"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Text" />
+
+        <TextView
+            android:id="@+id/meal_list_item_description"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="8dp"
+            android:fontFamily="sans-serif"
+            android:textColor="@color/medium_grey"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toStartOf="@+id/meal_list_item_created_by"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/meal_list_item_name"
+            tools:text="Text" />
+
+        <TextView
+            android:id="@+id/meal_list_item_created_by"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/meal_list_item_description"
+            tools:text="Text" />
+
+    </android.support.constraint.ConstraintLayout>
+
+    <View
+        android:id="@+id/view"
+        style="@style/Divider"
+
+        android:layout_height="1dp"
+        android:layout_marginTop="14dp" />
+
+</LinearLayout>
