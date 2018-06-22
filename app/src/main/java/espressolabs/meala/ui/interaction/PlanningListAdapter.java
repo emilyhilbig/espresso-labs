@@ -45,8 +45,8 @@ public class PlanningListAdapter extends RecyclerView.Adapter<PlanningListAdapte
     public PlanningListAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         int layout = R.layout.meal_list_item;
 
-        ViewGroup vg = (ViewGroup) LayoutInflater.from(parent.getContext()).inflate(layout, parent, false);
-        return new ViewHolder(vg);
+        View view = LayoutInflater.from(parent.getContext()).inflate(layout, parent, false);
+        return new ViewHolder(view);
     }
 
     @Override
@@ -145,7 +145,7 @@ public class PlanningListAdapter extends RecyclerView.Adapter<PlanningListAdapte
         public boolean isSwiped;
         public boolean isExpanded = false;
 
-        public ViewHolder(ViewGroup vg) {
+        public ViewHolder(View vg) {
             super(vg);
 
             nameTextView = vg.findViewById(R.id.meal_list_item_name);

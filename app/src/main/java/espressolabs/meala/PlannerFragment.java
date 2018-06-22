@@ -3,6 +3,7 @@ package espressolabs.meala;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -13,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
@@ -31,6 +33,8 @@ import espressolabs.meala.PlanningListFragment;
  * create an instance of this fragment.
  */
 public class PlannerFragment extends Fragment {
+    private FloatingActionButton fabAdd;
+
     public PlannerFragment() {
         // Required empty public constructor
     }
@@ -71,6 +75,9 @@ public class PlannerFragment extends Fragment {
                 viewPager.setCurrentItem(date.getDay());
             }
         });
+
+        fabAdd = view.findViewById(R.id.fab_add_plan);
+        fabAdd.setOnClickListener(v -> Toast.makeText(getContext(), "Click", Toast.LENGTH_SHORT).show());
 
         return view;
     }
