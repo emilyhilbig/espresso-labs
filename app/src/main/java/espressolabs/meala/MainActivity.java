@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity
     Fragment plannerFragment;
     Fragment recipesFragment;
     Fragment groceryFragment;
+    Fragment profileFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +79,7 @@ public class MainActivity extends AppCompatActivity
         plannerFragment = new PlannerFragment();
         recipesFragment = new RecipeFragment();
         groceryFragment = new GroceryFragment();
+        profileFragment = new ProfileFragment();
 
         // Start with homeFragment
         fragmentManager.beginTransaction().add(R.id.fragment_container, homeFragment).commit();
@@ -103,6 +105,9 @@ public class MainActivity extends AppCompatActivity
                             break;
                         case R.id.navigation_grocery:
                             mCurFragment = groceryFragment;
+                            break;
+                        case R.id.navigation_profile:
+                            mCurFragment = profileFragment;
                             break;
                     }
 
