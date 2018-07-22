@@ -35,7 +35,7 @@
                                     <map>
                                       <entry key="assetType" value="IMAGE" />
                                       <entry key="imageAsset" value="D:\Hannah\Desktop\MealA_Transparent.png" />
-                                      <entry key="outputName" value="mealA" />
+                                      <entry key="outputName" value="meala" />
                                       <entry key="theme" value="CUSTOM" />
                                       <entry key="themeColor" value="760000" />
                                     </map>
@@ -68,7 +68,7 @@
                                       <entry key="backgroundColor" value="ffffff" />
                                       <entry key="foregroundImage" value="D:\Hannah\Desktop\MealA.png" />
                                       <entry key="legacyIconShape" value="NONE" />
-                                      <entry key="outputName" value="mealA" />
+                                      <entry key="outputName" value="meala" />
                                       <entry key="webIconShape" value="NONE" />
                                     </map>
                                   </option>
@@ -96,17 +96,12 @@
                                     <map>
                                       <entry key="assetType" value="IMAGE" />
                                       <entry key="imageAsset" value="D:\Hannah\Desktop\MealA_Transparent.png" />
-                                      <entry key="outputName" value="mealA_stat_name" />
+                                      <entry key="outputName" value="meala_stat_name" />
                                     </map>
                                   </option>
                                 </PersistentState>
                               </value>
                             </entry>
-                          </map>
-                        </option>
-                        <option name="values">
-                          <map>
-                            <entry key="outputIconType" value="NOTIFICATION" />
                           </map>
                         </option>
                       </PersistentState>
