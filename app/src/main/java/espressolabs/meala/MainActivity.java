@@ -13,6 +13,11 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.PopupMenu;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.lang.reflect.Field;
 
@@ -48,7 +53,7 @@ class BottomNavigationViewHelper {
 
 
 public class MainActivity extends AppCompatActivity
-        implements RecipeListFragment.OnRecipeClickListener, NameDialogFragment.NameDialogListener, ItemDialogFragment.ItemDialogListener{
+        implements RecipeListFragment.OnRecipeClickListener, NameDialogFragment.NameDialogListener, ItemDialogFragment.ItemDialogListener, PopupMenu.OnMenuItemClickListener {
 
     Fragment mCurFragment;
     Fragment mPrevFragment;
@@ -106,9 +111,6 @@ public class MainActivity extends AppCompatActivity
                         case R.id.navigation_grocery:
                             mCurFragment = groceryFragment;
                             break;
-                        case R.id.navigation_profile:
-                            mCurFragment = profileFragment;
-                            break;
                     }
 
                     // Check if fragment was added previously
@@ -134,6 +136,34 @@ public class MainActivity extends AppCompatActivity
                 }
             };
 
+
+    public void showProfilePopup(View v) {
+        PopupMenu popup = new PopupMenu(this, v);
+
+        // This activity implements OnMenuItemClickListener
+        popup.setOnMenuItemClickListener(this);
+        popup.inflate(R.menu.profile);
+        popup.show();
+    }
+
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.logout:
+                FirebaseAuth mAuth = FirebaseAuth.getInstance();
+                mAuth.signOut();
+
+                startActivity(new Intent(this, LoginActivity.class));
+                finish();
+                return true;
+            case R.id.view_profile:
+                startActivity(new Intent(this, ProfileFragment.class));
+                finish();
+                return true;
+            default:
+                return false;
+        }
+    }
 
     // Listeners
 
