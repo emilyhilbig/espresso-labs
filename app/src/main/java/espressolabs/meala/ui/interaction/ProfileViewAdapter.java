@@ -4,10 +4,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.bumptech.glide.RequestManager;
 
@@ -16,20 +13,19 @@ import java.util.Collection;
 
 import az.plainpie.PieView;
 import espressolabs.meala.R;
-import espressolabs.meala.StatisticFragment;
-import espressolabs.meala.model.ShoppingListItem;
-import espressolabs.meala.model.StatisticListItem;
+import espressolabs.meala.ProfileFragment;
+import espressolabs.meala.model.MacroListItem;
 
 public class ProfileViewAdapter extends RecyclerView.Adapter<ProfileViewAdapter.ViewHolder> implements ItemAnimator.onAnimationEndListener{
 
     //private final List<RecipeContent.Recipe> mValues;
     private static final String TAG = "ProfileViewAdapter";
-    private final StatisticFragment.OnStatisticClickListener mListener;
+    private final ProfileFragment.OnStatisticClickListener mListener;
     private final int mColumns;
     private final RequestManager glide;
-    private ArrayList<StatisticListItem> data = new ArrayList<>();
+    private ArrayList<MacroListItem> data = new ArrayList<>();
 
-    public ProfileViewAdapter(StatisticFragment.OnStatisticClickListener listener, RequestManager glide, int columnCount) { //List<RecipeContent.Recipe> items,
+    public ProfileViewAdapter(ProfileFragment.OnStatisticClickListener listener, RequestManager glide, int columnCount) { //List<RecipeContent.Recipe> items,
         //mValues = items;
         mListener = listener;
         mColumns = columnCount;
@@ -57,7 +53,7 @@ public class ProfileViewAdapter extends RecyclerView.Adapter<ProfileViewAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
-        StatisticListItem item = data.get(position);
+        MacroListItem item = data.get(position);
 //        holder.statisticPieView.setPercentage(item.value);
 
         /*
@@ -101,7 +97,7 @@ public class ProfileViewAdapter extends RecyclerView.Adapter<ProfileViewAdapter.
         }*/
     }
 
-    public void setItems(Collection<StatisticListItem> items) {
+    public void setItems(Collection<MacroListItem> items) {
         data.clear();
         data.addAll(items);
 
@@ -115,7 +111,7 @@ public class ProfileViewAdapter extends RecyclerView.Adapter<ProfileViewAdapter.
 
         public PieView statisticPieView;
 
-        public StatisticListItem data;
+        public MacroListItem data;
 
         public boolean isSwiped;
         public boolean isExpanded = false;

@@ -1,53 +1,37 @@
 package espressolabs.meala;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
+import android.view.LayoutInflater;;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.DecelerateInterpolator;
-import android.view.animation.Interpolator;
-import android.view.animation.OvershootInterpolator;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import espressolabs.meala.firebase.FirebaseDatabaseConnectionWatcher;
-import espressolabs.meala.model.ShoppingListItem;
-import espressolabs.meala.model.StatisticListItem;
+import espressolabs.meala.model.MacroListItem;
 import espressolabs.meala.runnables.ActiveUsersUpdater;
 import espressolabs.meala.runnables.PresenceUpdater;
 import espressolabs.meala.ui.interaction.ItemAnimator;
 import espressolabs.meala.ui.interaction.ProfileViewAdapter;
-import espressolabs.meala.ui.interaction.StatisticRecyclerViewAdapter;
 import espressolabs.meala.utils.FCMHelper;
 
 public class ProfileFragment extends Fragment {
@@ -55,7 +39,7 @@ public class ProfileFragment extends Fragment {
     private RecyclerView listView;
     private static final String ARG_COLUMN_COUNT = "column-count";
     private int mColumnCount = 1;
-    private StatisticFragment.OnStatisticClickListener mListener;
+    private ProfileFragment.OnStatisticClickListener mListener;
     public static final String TAG = "ProfileFragment";
 
     private static final int STATE_STARTING = -1;
@@ -72,18 +56,10 @@ public class ProfileFragment extends Fragment {
     public ActiveUsersUpdater activeUsersUpdater;
     private String name = "Anonymous";
 
+
     public ProfileFragment() {
         // Required empty public constructor
     }
-
-    /*public static HomeFragment newInstance(String param1, String param2) {
-        HomeFragment fragment = new HomeFragment();
-        Bundle args = new Bundle();
-        //args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }*/
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -106,6 +82,9 @@ public class ProfileFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         Context context = getContext();
 
+        // update user name
+        TextView nameTextView = view.findViewById(R.id.txtName);
+
         // Setup RecyclerView
         listView = view.findViewById(R.id.profile_list);
         listView.setLayoutManager(new LinearLayoutManager(context));
@@ -117,9 +96,9 @@ public class ProfileFragment extends Fragment {
         listView.setItemAnimator(new ItemAnimator(context, adapter));
 
         // Load initial data (get data from firebase)
-        ArrayList<StatisticListItem> items = new ArrayList<>(1);
-        items.add(new StatisticListItem("%",50));
-        items.add(new StatisticListItem("%",90));
+        ArrayList<MacroListItem> items = new ArrayList<>(1);
+        items.add(new MacroListItem("%",50));
+        items.add(new MacroListItem("%",90));
         adapter.setItems(items);
 
         // Initializations
@@ -132,10 +111,10 @@ public class ProfileFragment extends Fragment {
         dbRef.child("items").orderByChild("status").equalTo("ACTIVE").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                ArrayList<StatisticListItem> items = new ArrayList<>((int) dataSnapshot.getChildrenCount());
+                ArrayList<MacroListItem> items = new ArrayList<>((int) dataSnapshot.getChildrenCount());
                 for (DataSnapshot dsp : dataSnapshot.getChildren()) {
                     Log.v(TAG, "Single " + dsp.toString());
-                    StatisticListItem item = StatisticListItem.fromSnapshot(dsp);
+                    MacroListItem item = MacroListItem.fromSnapshot(dsp);
                     items.add(item);
                 }
 
@@ -147,6 +126,10 @@ public class ProfileFragment extends Fragment {
                 Log.e(TAG, "Cancelled " + databaseError.toString());
             }
         });
+
+        // current user
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        nameTextView.setText(firebaseUser.getDisplayName());
     }
 
     public interface OnStatisticClickListener {

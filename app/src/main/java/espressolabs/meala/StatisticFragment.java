@@ -20,7 +20,6 @@ import android.view.animation.Interpolator;
 import android.view.animation.OvershootInterpolator;
 
 import com.bumptech.glide.Glide;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -30,7 +29,6 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 import espressolabs.meala.firebase.FirebaseDatabaseConnectionWatcher;
-import espressolabs.meala.model.ShoppingListItem;
 import espressolabs.meala.model.StatisticListItem;
 import espressolabs.meala.runnables.ActiveUsersUpdater;
 import espressolabs.meala.runnables.PresenceUpdater;
