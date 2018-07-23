@@ -19,6 +19,8 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 
 public class LoginActivity extends BaseActivity implements
@@ -94,6 +96,13 @@ public class LoginActivity extends BaseActivity implements
                         // Sign in success, update UI with the signed-in user's information
                         Log.d(TAG, "signInWithCredential:success");
                         FirebaseUser user = mAuth.getCurrentUser();
+
+                        // Save user information to database for ease of use
+                        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference();
+                        dbRef.child("user").child(user.getUid()).child("email").setValue(user.getEmail());
+                        dbRef.child("user").child(user.getUid()).child("name").setValue(user.getDisplayName());
+
+                        // Update UI
                         updateUI(user);
                     } else {
                         // If sign in fails, display a message to the user.
