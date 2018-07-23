@@ -23,9 +23,11 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import static espressolabs.meala.utils.Constants.FAVORITES;
+import static espressolabs.meala.utils.Constants.SHORTLIST;
+
 
 public class RecipeFragment extends Fragment {
-
 
     public void Recipe() {
         // Required empty public constructor
@@ -83,9 +85,9 @@ public class RecipeFragment extends Fragment {
     private void setupViewPager(ViewPager viewPager) {
         viewPager.setOffscreenPageLimit(2);
         Adapter adapter = new Adapter(getChildFragmentManager());
-        adapter.addFragment(RecipeListFragment.newInstance(1), "Trending");
-        adapter.addFragment(RecipeListFragment.newInstance(2), "Shortlist");
-        adapter.addFragment(RecipeListFragment.newInstance(2), "Favorites");
+        adapter.addFragment(RecipeListFragment.newInstance(1, "trending"), "Trending");
+        adapter.addFragment(RecipeListFragment.newInstance(2, SHORTLIST), "Shortlist");
+        adapter.addFragment(RecipeListFragment.newInstance(2, FAVORITES), "Favorites");
         viewPager.setAdapter(adapter);
     }
 
