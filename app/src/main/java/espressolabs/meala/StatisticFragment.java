@@ -2,8 +2,11 @@ package espressolabs.meala;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -20,13 +23,20 @@ import com.bumptech.glide.Glide;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
+import espressolabs.meala.firebase.FirebaseDatabaseConnectionWatcher;
 import espressolabs.meala.model.ShoppingListItem;
 import espressolabs.meala.model.StatisticListItem;
+import espressolabs.meala.runnables.ActiveUsersUpdater;
+import espressolabs.meala.runnables.PresenceUpdater;
 import espressolabs.meala.ui.interaction.ItemAnimator;
 import espressolabs.meala.ui.interaction.StatisticRecyclerViewAdapter;
+import espressolabs.meala.utils.FCMHelper;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -45,6 +55,15 @@ public class StatisticFragment extends Fragment {
     private static final int STATE_EMPTY = 1;
     private static final int STATE_LIST = 2;
     private int state = STATE_STARTING;
+    public static final String TAG = "StatisticFragment";
+
+    private SharedPreferences prefs;
+    private DatabaseReference dbRef;
+    private FirebaseDatabaseConnectionWatcher fbDbConnectionWatcher;
+    private FirebaseDatabase database;
+    private PresenceUpdater presenceUpdater;
+    public ActiveUsersUpdater activeUsersUpdater;
+    private String name = "Anonymous";
 
     public StatisticFragment() {
         // Required empty public constructor
@@ -149,6 +168,31 @@ public class StatisticFragment extends Fragment {
         items.add(new StatisticListItem("%",90));
         adapter.setItems(items);
 
+        // Initializations
+        prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        database = FirebaseDatabase.getInstance();
+        dbRef = database.getReference();
+        FCMHelper.init(context);
+
+        // Load initial data
+        dbRef.child("items").orderByChild("status").equalTo("ACTIVE").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                ArrayList<StatisticListItem> items = new ArrayList<>((int) dataSnapshot.getChildrenCount());
+                for (DataSnapshot dsp : dataSnapshot.getChildren()) {
+                    Log.v(TAG, "Single " + dsp.toString());
+                    StatisticListItem item = StatisticListItem.fromSnapshot(dsp);
+                    items.add(item);
+                }
+
+                adapter.setItems(items);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.e(TAG, "Cancelled " + databaseError.toString());
+            }
+        });
     }
 
 
@@ -236,4 +280,51 @@ public class StatisticFragment extends Fragment {
         }
     }
 
+    private void setupConnectionWatcher() {
+        Snackbar.make(getActivity().findViewById(android.R.id.content), R.string.snackbar_database_connecting, Snackbar.LENGTH_INDEFINITE).show();
+        fbDbConnectionWatcher = new FirebaseDatabaseConnectionWatcher();
+        fbDbConnectionWatcher.addListener(new FirebaseDatabaseConnectionWatcher.OnConnectionChangeListener() {
+            @Override
+            public void onConnected() {
+                Snackbar.make(getActivity().findViewById(android.R.id.content), R.string.snackbar_database_connected, Snackbar.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onDisconnected() {
+                if (getView() != null) {
+                    Snackbar.make(getActivity().findViewById(android.R.id.content), R.string.snackbar_database_reconnecting, Snackbar.LENGTH_INDEFINITE).show();
+                }
+            }
+        });
+    }
+
+    private void setupActiveUsersUpdater() {
+        presenceUpdater = new PresenceUpdater(dbRef);
+        presenceUpdater.start();
+    }
+
+    private void setupPresenceUpdater() {
+        activeUsersUpdater = new ActiveUsersUpdater(dbRef);
+        activeUsersUpdater.addListener(new ActiveUsersUpdater.OnUserConnectionChanged() {
+            @Override
+            public void onConnected(String connectedName) {
+                if (!name.equals(connectedName)) {
+                    Snackbar.make(getActivity().findViewById(android.R.id.content), getString(R.string.snackbar_user_connected, connectedName), Snackbar.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onDisconnected(String disconnectedName) {
+                if (!name.equals(disconnectedName)) {
+                    Snackbar.make(getActivity().findViewById(android.R.id.content), getString(R.string.snackbar_user_disconnected, disconnectedName), Snackbar.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onActivesChanged(ArrayList<String> actives) {
+
+            }
+        });
+        activeUsersUpdater.start();
+    }
 }

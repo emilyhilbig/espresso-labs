@@ -1,10 +1,13 @@
 package espressolabs.meala.ui.interaction;
+import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.RequestManager;
 
@@ -14,6 +17,7 @@ import java.util.Collection;
 import az.plainpie.PieView;
 import espressolabs.meala.R;
 import espressolabs.meala.StatisticFragment;
+import espressolabs.meala.model.ShoppingListItem;
 import espressolabs.meala.model.StatisticListItem;
 
 public class ProfileViewAdapter extends RecyclerView.Adapter<ProfileViewAdapter.ViewHolder> implements ItemAnimator.onAnimationEndListener{
@@ -38,10 +42,10 @@ public class ProfileViewAdapter extends RecyclerView.Adapter<ProfileViewAdapter.
         //int recipeLayout = mColumns == 1 ? R.layout.recipe_card : R.layout.recipe_tile;
         //View view = LayoutInflater.from(parent.getContext())
         //        .inflate(recipeLayout, parent, false);
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.profile_list_item, parent, false);
+        ViewGroup vg = (ViewGroup) LayoutInflater.from(parent.getContext()).inflate(R.layout.profile_list_item, parent, false);
         //((PieView) view.findViewById(R.id.pieView)).setPercentage(50);
 
-        return new ViewHolder(view);
+        return new ViewHolder(vg);
     }
 
     /*
@@ -53,8 +57,10 @@ public class ProfileViewAdapter extends RecyclerView.Adapter<ProfileViewAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
-        /*holder.mItem = mValues.get(position);
+        StatisticListItem item = data.get(position);
+//        holder.statisticPieView.setPercentage(item.value);
 
+        /*
         if (mColumns <= 1) {
             holder.mText.setText(mValues.get(position).details);
         }
@@ -74,63 +80,8 @@ public class ProfileViewAdapter extends RecyclerView.Adapter<ProfileViewAdapter.
 
     @Override
     public int getItemCount() {
-        //return mValues.size();
-        return 2;
-    }
-
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        public ViewHolder(View itemView) {
-            super(itemView);
-        };
-
-        @Override
-        public void onClick(View view) {};
-        /*public final View mView;
-        public final TextView mTitle;
-        public final TextView mText;
-        public final ImageView mImage;
-        public RecipeContent.Recipe mItem;
-
-        public ViewHolder(View itemView) {
-            super(itemView);
-            AppCompatImageButton fav_button = itemView.findViewById(R.id.favorite_button);
-            AppCompatImageButton sl_button = itemView.findViewById(R.id.shortlist_button);
-            AppCompatImageButton pln_button = itemView.findViewById(R.id.confirm_button);
-            if (fav_button != null) {fav_button.setOnClickListener(this);}
-            if (sl_button != null) {sl_button.setOnClickListener(this);}
-            if (pln_button != null) {pln_button.setOnClickListener(this);}
-
-            mView = itemView;
-            mTitle = itemView.findViewById(R.id.recipe_title);
-            mText = itemView.findViewById(R.id.recipe_text);
-            mImage = itemView.findViewById(R.id.recipe_image);
-        }
-
-        @Override
-        public String toString() {
-            return super.toString() + " '" + mTitle.getText() + "'";
-        }
-
-        @Override
-        public void onClick(View view) {
-            int id = view.getId();
-
-            String verb = "Added to ";
-            switch (id) {
-                case R.id.favorite_button:
-                    // button event
-                    Toast.makeText(view.getContext(), verb + "favorites!", Toast.LENGTH_SHORT).show();
-                    break;
-                case R.id.shortlist_button:
-                    Toast.makeText(view.getContext(), verb + "shortlist!", Toast.LENGTH_SHORT).show();
-                    break;
-                case R.id.confirm_button:
-                    Snackbar.make(view, verb + "planner!", Snackbar.LENGTH_SHORT)
-                            .setAction("Action", null).show();
-                    break;
-
-            }
-        }*/
+        return data.size();
+        //return 2;
     }
 
     @Override
@@ -155,5 +106,42 @@ public class ProfileViewAdapter extends RecyclerView.Adapter<ProfileViewAdapter.
         data.addAll(items);
 
         notifyItemRangeInserted(0, data.size());
+    }
+
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+
+        //public final int[] defaultTextColors;
+        public final int defaultBackgroundColor;
+
+        public PieView statisticPieView;
+
+        public StatisticListItem data;
+
+        public boolean isSwiped;
+        public boolean isExpanded = false;
+
+        public ViewHolder(ViewGroup vg) {
+            super(vg);
+
+            statisticPieView = vg.findViewById(R.id.pieView);
+
+            /*defaultTextColors = new int[statisticPieView.length];
+            for (int i = 0; i < defaultTextColors.length; i++) {
+                defaultTextColors[i] = textViews[i].getCurrentTextColor();
+            }*/
+
+            defaultBackgroundColor = ((ColorDrawable) itemView.getBackground()).getColor();
+        }
+
+        /*public void resetTextColor() {
+            for (int i = 0; i < defaultTextColors.length; i++) {
+                textViews[i].setTextColor(defaultTextColors[i]);
+            }
+        }*/
+
+        public void resetBackgroundColor() {
+            itemView.setBackgroundColor(defaultBackgroundColor);
+        }
+
     }
 }

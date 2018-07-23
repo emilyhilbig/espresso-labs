@@ -111,6 +111,9 @@ public class MainActivity extends AppCompatActivity
                         case R.id.navigation_grocery:
                             mCurFragment = groceryFragment;
                             break;
+                        case R.id.navigation_profile:
+                            mCurFragment = profileFragment;
+                            break;
                     }
 
                     // Check if fragment was added previously
