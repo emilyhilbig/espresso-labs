@@ -34,7 +34,7 @@
                                   <option name="values">
                                     <map>
                                       <entry key="assetType" value="IMAGE" />
-                                      <entry key="imageAsset" value="D:\Hannah\Desktop\MealA_Transparent.png" />
+                                      <entry key="imageAsset" value="$APPLICATION_HOME_DIR$/bin/D:\Hannah\Desktop\MealA_Transparent.png" />
                                       <entry key="outputName" value="meala" />
                                       <entry key="theme" value="CUSTOM" />
                                       <entry key="themeColor" value="760000" />
@@ -48,12 +48,23 @@
                                 <PersistentState>
                                   <option name="children">
                                     <map>
+                                      <entry key="foregroundClipArt">
+                                        <value>
+                                          <PersistentState>
+                                            <option name="values">
+                                              <map>
+                                                <entry key="trimmed" value="true" />
+                                              </map>
+                                            </option>
+                                          </PersistentState>
+                                        </value>
+                                      </entry>
                                       <entry key="foregroundImage">
                                         <value>
                                           <PersistentState>
                                             <option name="values">
                                               <map>
-                                                <entry key="scalingPercent" value="121" />
+                                                <entry key="scalingPercent" value="102" />
                                                 <entry key="trimmed" value="true" />
                                               </map>
                                             </option>
@@ -65,10 +76,11 @@
                                   <option name="values">
                                     <map>
                                       <entry key="backgroundAssetType" value="COLOR" />
-                                      <entry key="backgroundColor" value="ffffff" />
-                                      <entry key="foregroundImage" value="D:\Hannah\Desktop\MealA.png" />
+                                      <entry key="backgroundColor" value="2885ff" />
+                                      <entry key="backgroundLayerName" value="meala_background" />
+                                      <entry key="foregroundImage" value="$USER_HOME$/Downloads/image (2).png" />
+                                      <entry key="foregroundLayerName" value="meala_foreground" />
                                       <entry key="legacyIconShape" value="NONE" />
-                                      <entry key="outputName" value="meala" />
                                       <entry key="webIconShape" value="NONE" />
                                     </map>
                                   </option>
@@ -82,7 +94,7 @@
                                     <map>
                                       <entry key="assetType" value="IMAGE" />
                                       <entry key="iconShape" value="NONE" />
-                                      <entry key="imageAsset" value="D:\Hannah\Desktop\MealA.png" />
+                                      <entry key="imageAsset" value="$APPLICATION_HOME_DIR$/bin/D:\Hannah\Desktop\MealA.png" />
                                       <entry key="outputName" value="mealA" />
                                     </map>
                                   </option>
@@ -95,7 +107,7 @@
                                   <option name="values">
                                     <map>
                                       <entry key="assetType" value="IMAGE" />
-                                      <entry key="imageAsset" value="D:\Hannah\Desktop\MealA_Transparent.png" />
+                                      <entry key="imageAsset" value="$APPLICATION_HOME_DIR$/bin/D:\Hannah\Desktop\MealA_Transparent.png" />
                                       <entry key="outputName" value="meala_stat_name" />
                                     </map>
                                   </option>
