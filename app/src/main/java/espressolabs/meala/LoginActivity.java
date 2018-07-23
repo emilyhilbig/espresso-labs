@@ -1,6 +1,8 @@
 package espressolabs.meala;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 
 import android.os.Bundle;
@@ -21,6 +23,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
+import static espressolabs.meala.utils.Constants.PREFS_NAME;
 
 
 public class LoginActivity extends BaseActivity implements
@@ -101,6 +105,10 @@ public class LoginActivity extends BaseActivity implements
                         DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference();
                         dbRef.child("user").child(user.getUid()).child("email").setValue(user.getEmail());
                         dbRef.child("user").child(user.getUid()).child("name").setValue(user.getDisplayName());
+
+                        // Save user name pref
+                        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                        prefs.edit().putString(PREFS_NAME, user.getDisplayName()).apply();
 
                         // Update UI
                         updateUI(user);

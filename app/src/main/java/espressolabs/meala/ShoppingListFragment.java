@@ -25,6 +25,8 @@ import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.view.animation.OvershootInterpolator;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -47,6 +49,9 @@ import espressolabs.meala.ui.interaction.ItemTouchHelperCallback;
 import espressolabs.meala.ui.interaction.ShoppingListAdapter;
 import espressolabs.meala.utils.FCMHelper;
 
+import static espressolabs.meala.utils.Constants.PREFS_NAME;
+import static espressolabs.meala.utils.Constants.PREFS_VIEW_SIZE;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -60,11 +65,9 @@ public class ShoppingListFragment extends Fragment {
     private static final int STATE_LOADING = 0;
     private static final int STATE_EMPTY = 1;
     private static final int STATE_LIST = 2;
-    public final String PREFS_NAME = "name";
-    public final String PREFS_VIEW_SIZE = "viewSize";
     public final String FIREBASE_TOPIC_ADD = "add";
     public ActiveUsersUpdater activeUsersUpdater;
-    private String name = "Anonymous";
+    private String name;
     private ShoppingListAdapter adapter;
     private DatabaseReference dbRef;
     private SharedPreferences prefs;
