@@ -37,8 +37,8 @@
     <string name="loading_home_list">Loading your suggestions…</string>
     <string name="empty_home_list">Sorry, we couldn\'t find anything 😞</string>
 
-    <string name="loading_shopping_list">Loading your list…</string>
-    <string name="empty_shopping_list">Nothing is on your list!</string>
+    <string name="loading_list">Loading your list…</string>
+    <string name="empty_list">Nothing is on your list!</string>
 
     <string name="shopping_list_item_created_by">Added by: %1$s</string>
     <string name="shopping_list_item_price_compact">Price: %1$s</string>

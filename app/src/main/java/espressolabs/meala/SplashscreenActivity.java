@@ -8,11 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import espressolabs.meala.LoginActivity;
-import espressolabs.meala.MainActivity;
-
-
-public class MainEmptyActivity extends AppCompatActivity {
+public class SplashscreenActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
 
     @Override
@@ -25,7 +21,7 @@ public class MainEmptyActivity extends AppCompatActivity {
         // Check if user is signed in (non-null)
         FirebaseUser currentUser = mAuth.getCurrentUser();
 
-        // go straight to main if a token is stored
+        // Launch main activity is user is detected, otherwise login
         if (currentUser != null) {
             activityIntent = new Intent(this, MainActivity.class);
         } else {

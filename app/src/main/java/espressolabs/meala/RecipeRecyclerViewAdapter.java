@@ -1,7 +1,6 @@
 package espressolabs.meala;
 
 import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.AppCompatImageButton;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,26 +8,35 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.RequestManager;
 
 import java.util.List;
 
 import espressolabs.meala.RecipeListFragment.OnRecipeClickListener;
-import espressolabs.meala.model.RecipeContent.Recipe;
+import espressolabs.meala.model.RecipeItem;
+
+import static espressolabs.meala.utils.Constants.FAVORITES;
+import static espressolabs.meala.utils.Constants.SHORTLIST;
 
 
 public class RecipeRecyclerViewAdapter extends RecyclerView.Adapter<RecipeRecyclerViewAdapter.ViewHolder> {
 
-    private final List<Recipe> mValues;
+    private final List<RecipeItem> mValues;
     private final OnRecipeClickListener mListener;
     private final int mColumns;
     private final RequestManager glide;
 
-    public RecipeRecyclerViewAdapter(List<Recipe> items, RecipeListFragment.OnRecipeClickListener listener, RequestManager glide, int columnCount) {
+    private final MyAdapterListener onClickListener;
+
+    public interface MyAdapterListener {
+        void buttonOnClick(View v, RecipeItem item, String list_type);
+    }
+
+    public RecipeRecyclerViewAdapter(List<RecipeItem> items, RecipeListFragment.OnRecipeClickListener listener, MyAdapterListener clickListener, RequestManager glide, int columnCount) {
         mValues = items;
         mListener = listener;
+        onClickListener = clickListener;
         mColumns = columnCount;
         this.glide = glide;
     }
@@ -42,7 +50,7 @@ public class RecipeRecyclerViewAdapter extends RecyclerView.Adapter<RecipeRecycl
         return new ViewHolder(view);
     }
 
-    public void updateRecipeList(List<Recipe> newlist) {
+    public void updateRecipeList(List<RecipeItem> newlist) {
         mValues.clear();
         mValues.addAll(newlist);
         this.notifyDataSetChanged();
@@ -53,10 +61,10 @@ public class RecipeRecyclerViewAdapter extends RecyclerView.Adapter<RecipeRecycl
         holder.mItem = mValues.get(position);
 
         if (mColumns <= 1) {
-            holder.mText.setText(mValues.get(position).details);
+            holder.mText.setText(mValues.get(position).getSource());
         }
 
-        holder.mTitle.setText(String.valueOf(mValues.get(position).title));
+        holder.mTitle.setText(String.valueOf(mValues.get(position).getTitle()));
 
         holder.mView.setOnClickListener(v -> {
             if (null != mListener) {
@@ -66,7 +74,7 @@ public class RecipeRecyclerViewAdapter extends RecyclerView.Adapter<RecipeRecycl
             }
         });
 
-        glide.load(mValues.get(position).image_url).into(holder.mImage);
+        glide.load(mValues.get(position).getImage_url()).into(holder.mImage);
     }
 
     @Override
@@ -74,21 +82,26 @@ public class RecipeRecyclerViewAdapter extends RecyclerView.Adapter<RecipeRecycl
         return mValues.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        public final View mView;
-        public final TextView mTitle;
-        public final TextView mText;
-        public final ImageView mImage;
-        public Recipe mItem;
+    public class ViewHolder extends RecyclerView.ViewHolder {
+        final View mView;
+        final TextView mTitle;
+        final TextView mText;
+        final ImageView mImage;
+        RecipeItem mItem;
 
-        public ViewHolder(View itemView) {
+        ViewHolder(View itemView) {
             super(itemView);
             AppCompatImageButton fav_button = itemView.findViewById(R.id.favorite_button);
-            AppCompatImageButton sl_button = itemView.findViewById(R.id.shortlist_button);
-            AppCompatImageButton pln_button = itemView.findViewById(R.id.confirm_button);
-            if (fav_button != null) {fav_button.setOnClickListener(this);}
-            if (sl_button != null) {sl_button.setOnClickListener(this);}
-            if (pln_button != null) {pln_button.setOnClickListener(this);}
+            AppCompatImageButton shortlist_button = itemView.findViewById(R.id.shortlist_button);
+            AppCompatImageButton plan_button = itemView.findViewById(R.id.confirm_button);
+
+            if (fav_button != null) {
+                fav_button.setOnClickListener(v -> onClickListener.buttonOnClick(v, mItem, FAVORITES));
+            }
+
+            if (shortlist_button != null) {
+                shortlist_button.setOnClickListener(v -> onClickListener.buttonOnClick(v, mItem, SHORTLIST));
+            }
 
             mView = itemView;
             mTitle = itemView.findViewById(R.id.recipe_title);
@@ -99,27 +112,6 @@ public class RecipeRecyclerViewAdapter extends RecyclerView.Adapter<RecipeRecycl
         @Override
         public String toString() {
             return super.toString() + " '" + mTitle.getText() + "'";
-        }
-
-        @Override
-        public void onClick(View view) {
-            int id = view.getId();
-
-            String verb = "Added to ";
-            switch (id) {
-                case R.id.favorite_button:
-                    // button event
-                    Toast.makeText(view.getContext(), verb + "favorites!", Toast.LENGTH_SHORT).show();
-                    break;
-                case R.id.shortlist_button:
-                    Toast.makeText(view.getContext(), verb + "shortlist!", Toast.LENGTH_SHORT).show();
-                    break;
-                case R.id.confirm_button:
-                    Snackbar.make(view, verb + "planner!", Snackbar.LENGTH_SHORT)
-                            .setAction("Action", null).show();
-                    break;
-
-            }
         }
     }
 }

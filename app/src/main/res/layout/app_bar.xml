@@ -14,6 +14,13 @@
         app:layout_scrollFlags="scroll|enterAlways|snap"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light" >
 
+        <ImageView
+            android:id="@+id/profile_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/ic_person_grey_24dp"
+            android:onClick="showProfilePopup"/>
+
         <TextView
             android:id="@+id/toolbar_title"
             android:layout_width="wrap_content"
@@ -23,6 +30,8 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
             android:textStyle="bold" />
     </android.support.v7.widget.Toolbar>
+
+
 
     <android.support.design.widget.TabLayout
         android:id="@+id/tabs"
