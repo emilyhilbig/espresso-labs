@@ -54,6 +54,8 @@ public class StatisticRecyclerViewAdapter extends RecyclerView.Adapter<Statistic
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
+        StatisticListItem item = data.get(position);
+        holder.data = item;
         /*holder.mItem = mValues.get(position);
 
         if (mColumns <= 1) {
@@ -62,6 +64,9 @@ public class StatisticRecyclerViewAdapter extends RecyclerView.Adapter<Statistic
 
         holder.mTitle.setText(String.valueOf(mValues.get(position).title));
 */
+        holder.pieView.setPercentage(item.value);
+        holder.pieView.setInnerText(item.name);
+
         holder.itemView.setOnClickListener(v -> {
             if (null != mListener) {
                 // Notify the active callbacks interface (the activity, if the
@@ -75,13 +80,18 @@ public class StatisticRecyclerViewAdapter extends RecyclerView.Adapter<Statistic
 
     @Override
     public int getItemCount() {
-        //return mValues.size();
-        return 2;
+        return data.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        public StatisticListItem data;
+
+        public PieView pieView;
+
         public ViewHolder(View itemView) {
             super(itemView);
+
+            pieView = itemView.findViewById(R.id.pieView);
         };
 
         @Override

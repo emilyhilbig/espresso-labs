@@ -26,7 +26,7 @@
             plainpie:inner_pie_padding="30"
             plainpie:inner_text_visibility="true"
             plainpie:percentage="75"
-            plainpie:percentage_size="70" />
+            plainpie:percentage_size="40" />
 
         <Button
             android:id="@+id/confirm_button"

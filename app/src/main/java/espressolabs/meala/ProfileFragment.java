@@ -101,7 +101,7 @@ public class ProfileFragment extends Fragment {
         items.add(new MacroListItem("%",90));
         adapter.setItems(items);
 
-        // Initializations
+        /*// Initializations
         prefs = PreferenceManager.getDefaultSharedPreferences(context);
         database = FirebaseDatabase.getInstance();
         dbRef = database.getReference();
@@ -125,7 +125,7 @@ public class ProfileFragment extends Fragment {
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Log.e(TAG, "Cancelled " + databaseError.toString());
             }
-        });
+        });*/
 
         // current user
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();

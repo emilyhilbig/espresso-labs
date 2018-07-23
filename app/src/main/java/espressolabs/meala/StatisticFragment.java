@@ -162,8 +162,11 @@ public class StatisticFragment extends Fragment {
 
         // Load initial data
         ArrayList<StatisticListItem> items = new ArrayList<>(1);
-        items.add(new StatisticListItem("%",50));
-        items.add(new StatisticListItem("%",90));
+        items.add(new StatisticListItem("%", "Calories",50));
+        items.add(new StatisticListItem("%", "Fat",90));
+        items.add(new StatisticListItem("%", "Protein",90));
+        items.add(new StatisticListItem("%", "Sugars",90));
+        items.add(new StatisticListItem("%", "Carbohydrates",90));
         adapter.setItems(items);
 
         /*// Initializations
