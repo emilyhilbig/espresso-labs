@@ -86,7 +86,7 @@ public class ShoppingListFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.shopping_list, null);
+        return inflater.inflate(R.layout.recycler_list, null);
     }
 
     @Override
@@ -94,7 +94,7 @@ public class ShoppingListFragment extends Fragment {
         Context context = getContext();
 
         // Setup RecyclerView
-        listView = view.findViewById(R.id.shopping_list);
+        listView = view.findViewById(R.id.recycler_list);
         listView.setLayoutManager(new LinearLayoutManager(context));
 
         // Handle swipes
@@ -253,18 +253,18 @@ public class ShoppingListFragment extends Fragment {
     }
 
     private void setupConnectionWatcher() {
-        Snackbar.make(getView(), R.string.snackbar_database_connecting, Snackbar.LENGTH_INDEFINITE).show();
+        Snackbar.make(getActivity().findViewById(android.R.id.content), R.string.snackbar_database_connecting, Snackbar.LENGTH_INDEFINITE).show();
         fbDbConnectionWatcher = new FirebaseDatabaseConnectionWatcher();
         fbDbConnectionWatcher.addListener(new FirebaseDatabaseConnectionWatcher.OnConnectionChangeListener() {
             @Override
             public void onConnected() {
-                Snackbar.make(getView(), R.string.snackbar_database_connected, Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(getActivity().findViewById(android.R.id.content), R.string.snackbar_database_connected, Snackbar.LENGTH_SHORT).show();
             }
 
             @Override
             public void onDisconnected() {
                 if (getView() != null) {
-                    Snackbar.make(getView(), R.string.snackbar_database_reconnecting, Snackbar.LENGTH_INDEFINITE).show();
+                    Snackbar.make(getActivity().findViewById(android.R.id.content), R.string.snackbar_database_reconnecting, Snackbar.LENGTH_INDEFINITE).show();
                 }
             }
         });
@@ -281,14 +281,14 @@ public class ShoppingListFragment extends Fragment {
             @Override
             public void onConnected(String connectedName) {
                 if (!name.equals(connectedName)) {
-                    Snackbar.make(getView(), getString(R.string.snackbar_user_connected, connectedName), Snackbar.LENGTH_LONG).show();
+                    Snackbar.make(getActivity().findViewById(android.R.id.content), getString(R.string.snackbar_user_connected, connectedName), Snackbar.LENGTH_LONG).show();
                 }
             }
 
             @Override
             public void onDisconnected(String disconnectedName) {
                 if (!name.equals(disconnectedName)) {
-                    Snackbar.make(getView(), getString(R.string.snackbar_user_disconnected, disconnectedName), Snackbar.LENGTH_LONG).show();
+                    Snackbar.make(getActivity().findViewById(android.R.id.content), getString(R.string.snackbar_user_disconnected, disconnectedName), Snackbar.LENGTH_LONG).show();
                 }
             }
 
@@ -303,9 +303,9 @@ public class ShoppingListFragment extends Fragment {
     private void setUIState(int newState) {
         View view = getView();
         View[] views = new View[]{
-                view.findViewById(R.id.loading_shopping_list),
-                view.findViewById(R.id.empty_shopping_list),
-                view.findViewById(R.id.shopping_list)
+                view.findViewById(R.id.loading_list),
+                view.findViewById(R.id.empty_list),
+                view.findViewById(R.id.recycler_list)
         };
 
         int oldState = this.state;
@@ -337,8 +337,8 @@ public class ShoppingListFragment extends Fragment {
                 newView.animate().alpha(1).setDuration(duration).setInterpolator(interpolator).setListener(null).start();
 
                 if (newState == STATE_EMPTY) {
-                    View icon = view.findViewById(R.id.empty_shopping_list_icon);
-                    View text = view.findViewById(R.id.empty_shopping_list_text);
+                    View icon = view.findViewById(R.id.empty_list_icon);
+                    View text = view.findViewById(R.id.empty_list_text);
 
                     icon.setRotation(0);
                     icon.setTranslationX(-2000);

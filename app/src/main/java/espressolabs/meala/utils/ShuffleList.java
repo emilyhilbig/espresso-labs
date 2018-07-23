@@ -3,10 +3,10 @@ package espressolabs.meala.utils;
 import java.util.List;
 import java.util.Random;
 
-import espressolabs.meala.model.RecipeContent;
+import espressolabs.meala.model.RecipeItem;
 
 public class ShuffleList {
-    public static void shuffleList(List<RecipeContent.Recipe> a) {
+    public static void shuffleList(List<RecipeItem> a) {
         int n = a.size();
         Random random = new Random();
         random.nextInt();
@@ -16,8 +16,8 @@ public class ShuffleList {
         }
     }
 
-    private static void swap(List<RecipeContent.Recipe> a, int i, int change) {
-        RecipeContent.Recipe helper = a.get(i);
+    private static void swap(List<RecipeItem> a, int i, int change) {
+        RecipeItem helper = a.get(i);
         a.set(i, a.get(change));
         a.set(change, helper);
     }

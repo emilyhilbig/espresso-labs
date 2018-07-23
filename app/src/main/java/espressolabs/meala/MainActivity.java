@@ -23,7 +23,7 @@ import java.lang.reflect.Field;
 
 import espressolabs.meala.dialog.ItemDialogFragment;
 import espressolabs.meala.dialog.NameDialogFragment;
-import espressolabs.meala.model.RecipeContent;
+import espressolabs.meala.model.RecipeItem;
 
 
 class BottomNavigationViewHelper {
@@ -168,8 +168,8 @@ public class MainActivity extends AppCompatActivity
     // Listeners
 
     @Override
-    public void onListFragmentInteraction(RecipeContent.Recipe recipe) {
-        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(recipe.link));
+    public void onListFragmentInteraction(RecipeItem recipe) {
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(recipe.getLink()));
         startActivity(browserIntent);
     }
 
