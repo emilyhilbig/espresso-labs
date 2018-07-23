@@ -111,9 +111,9 @@ public class MainActivity extends AppCompatActivity
                         case R.id.navigation_grocery:
                             mCurFragment = groceryFragment;
                             break;
-                        case R.id.navigation_profile:
-                            mCurFragment = profileFragment;
-                            break;
+                        /*case R.id.navigation_profile:
+                                                mCurFragment = profileFragment;
+                                                break;*/
                     }
 
                     // Check if fragment was added previously
@@ -160,8 +160,27 @@ public class MainActivity extends AppCompatActivity
                 finish();
                 return true;
             case R.id.view_profile:
-                startActivity(new Intent(this, ProfileFragment.class));
-                finish();
+                //startActivity(new Intent(this, ProfileFragment.class));
+                //finish();
+                mPrevFragment = mCurFragment;
+                mCurFragment = profileFragment;
+
+                // Check if fragment was added previously
+                if(mCurFragment.getId() != 0 && fragmentManager.findFragmentById(mCurFragment.getId()) != null) {
+                    // Check if one fragment was added previously
+                    if(mPrevFragment != null) {
+                        fragmentManager.beginTransaction().hide(mPrevFragment).show(mCurFragment).commit();
+                    } else {
+                        fragmentManager.beginTransaction().show(mCurFragment).commit();
+                    }
+                } else {
+                    // Check if one fragment was added previously
+                    if(mPrevFragment != null) {
+                        fragmentManager.beginTransaction().add(R.id.fragment_container, mCurFragment).hide(mPrevFragment).commit();
+                    } else {
+                        fragmentManager.beginTransaction().add(R.id.fragment_container, mCurFragment).commit();
+                    }
+                }
                 return true;
             default:
                 return false;

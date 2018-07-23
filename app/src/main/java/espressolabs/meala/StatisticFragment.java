@@ -166,7 +166,7 @@ public class StatisticFragment extends Fragment {
         items.add(new StatisticListItem("%",90));
         adapter.setItems(items);
 
-        // Initializations
+        /*// Initializations
         prefs = PreferenceManager.getDefaultSharedPreferences(context);
         database = FirebaseDatabase.getInstance();
         dbRef = database.getReference();
@@ -190,7 +190,7 @@ public class StatisticFragment extends Fragment {
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Log.e(TAG, "Cancelled " + databaseError.toString());
             }
-        });
+        });*/
     }
 
 

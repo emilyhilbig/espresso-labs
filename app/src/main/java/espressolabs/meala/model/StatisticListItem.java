@@ -13,8 +13,8 @@ public class StatisticListItem {
 
     // need to get data from database then convert it to StatisticListItem
     public static StatisticListItem fromSnapshot(DataSnapshot snapshot) {
-        StatisticListItem item = snapshot.getValue(StatisticListItem.class);
-        item.measurement = snapshot.getKey();
+        StatisticListItem item = new StatisticListItem("%",90);//snapshot.getValue(StatisticListItem.class);
+        //item.measurement = snapshot.getKey();
 
         return item;
     }
