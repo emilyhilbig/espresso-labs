@@ -16,6 +16,7 @@
                             <entry key="actionbar">
                               <value>
                                 <PersistentState>
+<<<<<<< HEAD
                                   <option name="children">
                                     <map>
                                       <entry key="image">
@@ -109,6 +110,14 @@
                                       <entry key="assetType" value="IMAGE" />
                                       <entry key="imageAsset" value="$APPLICATION_HOME_DIR$/bin/D:\Hannah\Desktop\MealA_Transparent.png" />
                                       <entry key="outputName" value="meala_stat_name" />
+=======
+                                  <option name="values">
+                                    <map>
+                                      <entry key="assetType" value="IMAGE" />
+                                      <entry key="imageAsset" value="$USER_HOME$/ic_scanner.png" />
+                                      <entry key="outputName" value="ic_scanner" />
+                                      <entry key="theme" value="HOLO_DARK" />
+>>>>>>> parent of 78006ad... add icons
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -116,6 +125,14 @@
                             </entry>
                           </map>
                         </option>
+<<<<<<< HEAD
+=======
+                        <option name="values">
+                          <map>
+                            <entry key="outputIconType" value="ACTIONBAR" />
+                          </map>
+                        </option>
+>>>>>>> parent of 78006ad... add icons
                       </PersistentState>
                     </value>
                   </entry>
