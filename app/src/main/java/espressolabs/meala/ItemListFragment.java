@@ -99,7 +99,6 @@ public abstract class ItemListFragment extends Fragment{
         Log.v(TAG, "Moved to Shopping List " + item);
         item.makeActive();
         dbRef.child("items").child(item.key).setValue(item);
-        // todo: update shopping list when this is called
     }
     protected void archiveItem(ShoppingListAdapter.ViewHolder vh){
         // Archive - move to pantry
@@ -107,7 +106,6 @@ public abstract class ItemListFragment extends Fragment{
         Log.v(TAG, "Archive " + item);
         item.archive();
         dbRef.child("items").child(item.key).setValue(item);
-        // TODO: update pantry
     }
     protected abstract void swipeItemLeft(ShoppingListAdapter.ViewHolder vh);
     protected abstract void swipeItemRight(ShoppingListAdapter.ViewHolder vh);
