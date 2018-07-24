@@ -184,6 +184,11 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
             data.set(index, item);
             notifyItemChanged(index);
         }
+        else{
+            // THIS IS A TOTAL HACK, IT ONLY WORKS BECAUSE THERE IS TWO
+            data.add(item);
+            notifyDataSetChanged();
+        }
     }
 
     public void removeItem(ShoppingListItem item) {

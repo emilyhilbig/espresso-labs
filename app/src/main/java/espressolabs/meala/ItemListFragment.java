@@ -188,8 +188,19 @@ public abstract class ItemListFragment extends Fragment{
                 });
             }
         });
+//        dbRef.child("items").orderByChild("status").addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
 
-        // Load initial data
+        // Load initial data need a listbased event listener
         dbRef.child("items").orderByChild("status").equalTo(getItemStatus()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -197,6 +208,7 @@ public abstract class ItemListFragment extends Fragment{
                 for (DataSnapshot dsp : dataSnapshot.getChildren()) {
                     Log.v(TAG, "Single " + dsp.toString());
                     ShoppingListItem item = ShoppingListItem.fromSnapshot(dsp);
+                    // check
                     items.add(item);
                 }
 
