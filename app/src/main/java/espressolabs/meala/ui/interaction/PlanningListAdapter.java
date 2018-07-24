@@ -28,16 +28,12 @@ public class PlanningListAdapter extends RecyclerView.Adapter<PlanningListAdapte
 
     private static final String TAG = "PlanningListAdapter";
 
-    private final RecyclerView recyclerView;
-    private final Context context;
-
-    private ArrayList<MealListItem> data = new ArrayList<>();
+    private ArrayList<MealListItem> data;
 
     private Set<String> expandedItemKeys = new HashSet<>();
 
-    public PlanningListAdapter(Context context, RecyclerView recyclerView) {
-        this.context = context;
-        this.recyclerView = recyclerView;
+    public PlanningListAdapter(ArrayList<MealListItem> data) {
+        this.data = data;
     }
 
     @NonNull
@@ -53,6 +49,7 @@ public class PlanningListAdapter extends RecyclerView.Adapter<PlanningListAdapte
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
         MealListItem item = data.get(position);
 
+        // TODO move all this to ViewHolder class below
         // Reset values used by animation
         holder.itemView.getLayoutParams().height = LinearLayout.LayoutParams.WRAP_CONTENT;
         holder.resetBackgroundColor();
@@ -60,7 +57,6 @@ public class PlanningListAdapter extends RecyclerView.Adapter<PlanningListAdapte
         holder.isExpanded = expandedItemKeys.contains(item.key);
 
         holder.nameTextView.setText(item.name);
-        holder.createdByTextView.setText(context.getString(R.string.shopping_list_item_created_by, item.createdBy));
 
         holder.descriptionTextView.setVisibility((item.description.length() > 0) ? View.VISIBLE : View.GONE);
         holder.descriptionTextView.setText(item.description);
@@ -93,7 +89,9 @@ public class PlanningListAdapter extends RecyclerView.Adapter<PlanningListAdapte
     public void addItem(MealListItem item) {
         if (item.isActive()) {
             data.add(item);
+            Log.v(TAG, data.toString());
             notifyItemInserted(data.indexOf(item));
+
         } else {
             Log.v(TAG, "addItem not active");
         }
@@ -135,7 +133,6 @@ public class PlanningListAdapter extends RecyclerView.Adapter<PlanningListAdapte
         public final int[] defaultTextColors;
         public final int defaultBackgroundColor;
 
-        public TextView mealTextView;
         public TextView nameTextView;
         public TextView createdByTextView;
         public TextView descriptionTextView;
