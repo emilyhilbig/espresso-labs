@@ -46,8 +46,8 @@ public class StatisticFragment extends Fragment {
     private RecyclerView listView;
     private Boolean isDaily = true; // use for changing data for daily and weekly view
     private OnStatisticClickListener mListener;
-    private static final String ARG_COLUMN_COUNT = "column-count";
-    private int mColumnCount = 1;
+    private static final String ARG_ITEM_TYPE = "itemType";
+    private String itemtype = "";
     private static final int STATE_STARTING = -1;
     private static final int STATE_LOADING = 0;
     private static final int STATE_EMPTY = 1;
@@ -67,15 +67,13 @@ public class StatisticFragment extends Fragment {
         // Required empty public constructor
     }
 
-/*
-    public static HomeFragment newInstance(String param1, String param2) {
-        HomeFragment fragment = new HomeFragment();
+    public static StatisticFragment newInstance(String type) {
+        StatisticFragment fragment = new StatisticFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putString(ARG_ITEM_TYPE, type);
         fragment.setArguments(args);
         return fragment;
-    }*/
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -84,7 +82,7 @@ public class StatisticFragment extends Fragment {
         setHasOptionsMenu(true);
 
         if (getArguments() != null) {
-            mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
+            itemtype = getArguments().getString(ARG_ITEM_TYPE);
         }
     }
 
@@ -124,7 +122,7 @@ public class StatisticFragment extends Fragment {
         listView.setLayoutManager(new LinearLayoutManager(context));
 
         // Setup adapter
-        adapter = new StatisticRecyclerViewAdapter(mListener, Glide.with(this), mColumnCount);
+        adapter = new StatisticRecyclerViewAdapter(mListener, Glide.with(this));
         //adapter.setViewSize(prefs.getInt(PREFS_VIEW_SIZE, -1));
         listView.setAdapter(adapter);
         listView.setItemAnimator(new ItemAnimator(context, adapter));
@@ -164,9 +162,12 @@ public class StatisticFragment extends Fragment {
         ArrayList<StatisticListItem> items = new ArrayList<>(1);
         items.add(new StatisticListItem("%", "Calories",50));
         items.add(new StatisticListItem("%", "Fat",90));
-        items.add(new StatisticListItem("%", "Protein",90));
-        items.add(new StatisticListItem("%", "Sugars",90));
-        items.add(new StatisticListItem("%", "Carbohydrates",90));
+        Log.d("itemtype", itemtype);
+        if (itemtype.equals("Daily")) {
+            items.add(new StatisticListItem("%", "Protein", 80));
+            items.add(new StatisticListItem("%", "Sugars", 90));
+            items.add(new StatisticListItem("%", "Carbs", 70));
+        }
         adapter.setItems(items);
 
         /*// Initializations

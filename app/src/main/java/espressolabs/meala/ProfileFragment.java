@@ -97,8 +97,12 @@ public class ProfileFragment extends Fragment {
 
         // Load initial data (get data from firebase)
         ArrayList<MacroListItem> items = new ArrayList<>(1);
-        items.add(new MacroListItem("%",50));
-        items.add(new MacroListItem("%",90));
+        items.add(new MacroListItem("Calories",1740, true));
+        items.add(new MacroListItem("Fat",70, true)); // gram
+        items.add(new MacroListItem("Protein",70, true)); // gram
+        items.add(new MacroListItem("Carbs",310, true)); // gram
+        items.add(new MacroListItem("Sugar",90, true)); // gram
+        items.add(new MacroListItem("Sodium", (float)2.3, true)); // gram
         adapter.setItems(items);
 
         /*// Initializations

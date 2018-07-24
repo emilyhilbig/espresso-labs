@@ -28,8 +28,9 @@
             plainpie:percentage="75"
             plainpie:percentage_size="40" />
 
-        <Button
-            android:id="@+id/confirm_button"
+
+        <!--<Button
+            android:id="@+id/textItem"
             style="?android:attr/borderlessButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/cards_button_height"
@@ -38,10 +39,11 @@
             android:layout_marginEnd="@dimen/md_keylines"
             android:contentDescription="Suggestion accepted"
             android:text="Detail"
+            android:clickable="false"
             android:textColor="?android:attr/colorPrimary" /><![CDATA[
         />
 
 
-        ]]>
+        ]]>-->
     </RelativeLayout>
 </android.support.v7.widget.CardView>

@@ -93,7 +93,7 @@ public class RecipeRecyclerViewAdapter extends RecyclerView.Adapter<RecipeRecycl
             super(itemView);
             AppCompatImageButton fav_button = itemView.findViewById(R.id.favorite_button);
             AppCompatImageButton shortlist_button = itemView.findViewById(R.id.shortlist_button);
-            AppCompatImageButton plan_button = itemView.findViewById(R.id.confirm_button);
+            AppCompatImageButton plan_button = itemView.findViewById(R.id.planner_button);
 
             if (fav_button != null) {
                 fav_button.setOnClickListener(v -> onClickListener.buttonOnClick(v, mItem, FAVORITES));
