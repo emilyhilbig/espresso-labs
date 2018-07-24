@@ -6,7 +6,7 @@
 
     <item>
         <bitmap
-            android:src="@drawable/ic_scanner"
+            android:src="@mipmap/logo_foreground"
             android:tint="@color/medium_grey"
             android:gravity="center"/>
     </item>
