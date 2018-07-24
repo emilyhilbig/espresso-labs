@@ -12,9 +12,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import az.plainpie.PieView;
+import android.widget.Button;
+import android.widget.TextView;
 import espressolabs.meala.R;
 import espressolabs.meala.StatisticFragment;
-import espressolabs.meala.model.ShoppingListItem;
 import espressolabs.meala.model.StatisticListItem;
 
 public class StatisticRecyclerViewAdapter extends RecyclerView.Adapter<StatisticRecyclerViewAdapter.ViewHolder> implements ItemAnimator.onAnimationEndListener{
@@ -22,14 +23,12 @@ public class StatisticRecyclerViewAdapter extends RecyclerView.Adapter<Statistic
     //private final List<RecipeContent.Recipe> mValues;
     private static final String TAG = "StatisticRecyclerViewAdapter";
     private final StatisticFragment.OnStatisticClickListener mListener;
-    private final int mColumns;
     private final RequestManager glide;
     private ArrayList<StatisticListItem> data = new ArrayList<>();
 
-    public StatisticRecyclerViewAdapter(StatisticFragment.OnStatisticClickListener listener, RequestManager glide, int columnCount) { //List<RecipeContent.Recipe> items,
+    public StatisticRecyclerViewAdapter(StatisticFragment.OnStatisticClickListener listener, RequestManager glide) { //List<RecipeContent.Recipe> items,
         //mValues = items;
         mListener = listener;
-        mColumns = columnCount;
         this.glide = glide;
     }
 
@@ -66,6 +65,7 @@ public class StatisticRecyclerViewAdapter extends RecyclerView.Adapter<Statistic
 */
         holder.pieView.setPercentage(item.value);
         holder.pieView.setInnerText(item.name);
+        //holder.textItem.setText(item.measurement);
 
         holder.itemView.setOnClickListener(v -> {
             if (null != mListener) {
@@ -87,11 +87,13 @@ public class StatisticRecyclerViewAdapter extends RecyclerView.Adapter<Statistic
         public StatisticListItem data;
 
         public PieView pieView;
+        //public Button textItem;
 
         public ViewHolder(View itemView) {
             super(itemView);
 
             pieView = itemView.findViewById(R.id.pieView);
+            //textItem = itemView.findViewById(R.id.textItem);
         };
 
         @Override

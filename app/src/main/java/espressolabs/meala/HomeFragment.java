@@ -95,8 +95,8 @@ public class HomeFragment extends Fragment {
 
     private void setupViewPager(ViewPager viewPager) {
         Adapter adapter = new Adapter(getChildFragmentManager());
-        adapter.addFragment(new StatisticFragment(), "Daily");
-        adapter.addFragment(new StatisticFragment(), "Weekly");
+        adapter.addFragment(new StatisticFragment().newInstance("Daily"), "Daily");
+        adapter.addFragment(new StatisticFragment().newInstance("Weekly"), "Weekly");
         viewPager.setAdapter(adapter);
     }
 
