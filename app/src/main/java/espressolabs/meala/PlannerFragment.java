@@ -24,7 +24,6 @@ import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Calendar;
-import java.util.Date;
 
 
 import espressolabs.meala.model.MealListItem;
@@ -45,7 +44,7 @@ public class PlannerFragment extends Fragment {
 
     public PlannerFragment() {
         // Required empty public constructor
-        selectedDay = 20180626;
+        selectedDay = 0;
     }
 
     @Override
@@ -106,16 +105,16 @@ public class PlannerFragment extends Fragment {
 
             @Override
             public void onPageSelected(int position) {
-                CalendarDay c = calendar.getCurrentDate();
+                CalendarDay c = calendar.getSelectedDate();
                 Calendar jcal = Calendar.getInstance();
                 jcal.set(c.getYear(), c.getMonth(), position);
 
-                // TODO idk why this isn't deselecting the day
-                calendar.setDateSelected(c, false);
+                selectedDay = CalendarDay.from(jcal).hashCode();
+                Log.v(TAG, "Changing date selected to: " + Integer.toString(selectedDay));
 
+
+                calendar.setDateSelected(c, false);
                 calendar.setDateSelected(jcal, true);
-                calendar.setCurrentDate(jcal);
-                selectedDay = calendar.getSelectedDate().hashCode();
             }
 
         });
@@ -129,8 +128,7 @@ public class PlannerFragment extends Fragment {
             MealListItem testMeal = new MealListItem("Tristan", Integer.toString(selectedDay), "", MealListItem.Meal.SNACK);
             testMeal.status = MealListItem.Status.ACTIVE;
             p.addMeal(testMeal);
-        }
-        );
+        });
 
         return view;
     }

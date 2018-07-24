@@ -18,7 +18,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashSet;
-import java.util.Locale;
 import java.util.Set;
 
 import espressolabs.meala.R;
@@ -87,14 +86,9 @@ public class PlanningListAdapter extends RecyclerView.Adapter<PlanningListAdapte
     }
 
     public void addItem(MealListItem item) {
-        if (item.isActive()) {
-            data.add(item);
-            Log.v(TAG, data.toString());
-            notifyItemInserted(data.indexOf(item));
-
-        } else {
-            Log.v(TAG, "addItem not active");
-        }
+        data.add(item);
+        Log.v(TAG, data.toString());
+        notifyItemInserted(data.indexOf(item));
     }
 
     public void setItems(Collection<MealListItem> items) {

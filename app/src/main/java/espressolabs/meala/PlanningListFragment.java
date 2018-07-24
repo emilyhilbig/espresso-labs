@@ -111,9 +111,12 @@ public class PlanningListFragment extends Fragment {
         Context context = view.getContext();
         listView = view.findViewById(R.id.planner_list);
         listView.setLayoutManager(new LinearLayoutManager(context));
+        if (!items.isEmpty()) {
+       //     listView.findViewById(R.id.loading_planning_list).setVisibility(View.INVISIBLE);
+        }
 
         String dayText = Integer.toString(day);
-        ((TextView) view.findViewById(R.id.planner_list_title)).setText(dayText);
+    //    ((TextView) view.findViewById(R.id.planner_list_title)).setText(dayText);
 
         return view;
     }
@@ -130,7 +133,7 @@ public class PlanningListFragment extends Fragment {
        //         (this, R.layout.planner_list, items);
 
         // Setup adapter
-        adapter = new PlanningListAdapter(new ArrayList<>());
+        adapter = new PlanningListAdapter(items);
         listView.setAdapter(adapter);
         listView.setItemAnimator(new ItemAnimator(context, adapter));
     }
