@@ -1,7 +1,9 @@
 package espressolabs.meala;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -24,6 +26,7 @@ public class ScannerActivity extends AppCompatActivity implements ZXingScannerVi
 
     private ZXingScannerView scannerView;
     private static final int REQUEST_CAMERA = 1;
+    public static final int BARCODE_REQUEST = 10;
 
 
     @Override
@@ -109,6 +112,9 @@ public class ScannerActivity extends AppCompatActivity implements ZXingScannerVi
     @Override
     public void handleResult(Result result){
         final String myResult = result.getText();
-        Toast.makeText(getApplicationContext(), myResult, Toast.LENGTH_LONG).show();
+        Intent resultIntent = new Intent();
+        resultIntent.putExtra("barcode", myResult);
+        setResult(Activity.RESULT_OK, resultIntent);
+        finish();
     }
 }

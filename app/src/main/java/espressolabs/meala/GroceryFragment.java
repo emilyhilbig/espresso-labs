@@ -21,6 +21,8 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.app.Activity.RESULT_OK;
+
 
 public class GroceryFragment extends Fragment {
     private FloatingActionButton fabAdd;
@@ -114,7 +116,7 @@ public class GroceryFragment extends Fragment {
     public void openScanner(View view){
         Toast.makeText(getContext(), "Opening scanner", Toast.LENGTH_LONG).show();
         Intent intent = new Intent(getContext(), ScannerActivity.class);
-        startActivity(intent);
+        startActivityForResult(intent, ScannerActivity.BARCODE_REQUEST);
     }
 
     static class Adapter extends FragmentPagerAdapter {
@@ -144,5 +146,20 @@ public class GroceryFragment extends Fragment {
         public CharSequence getPageTitle(int position) {
             return mFragmentTitleList.get(position);
         }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case ScannerActivity.BARCODE_REQUEST:
+                if (resultCode == RESULT_OK) { handleScannedBarcode(data); }
+                break;
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    public void handleScannedBarcode(Intent data){
+        String barcode = data.getStringExtra("barcode");
+        Toast.makeText(getContext(), barcode, Toast.LENGTH_LONG).show();
     }
 }
