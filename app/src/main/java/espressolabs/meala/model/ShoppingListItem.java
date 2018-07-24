@@ -67,6 +67,10 @@ public class ShoppingListItem {
         status = Status.DELETED;
     }
 
+    public void makeActive() {
+        status = Status.ACTIVE;
+    }
+
     @Exclude
     public boolean isActive() {
         return status == Status.ACTIVE;

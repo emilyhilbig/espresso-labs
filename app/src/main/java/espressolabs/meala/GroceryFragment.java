@@ -27,6 +27,7 @@ public class GroceryFragment extends Fragment {
     private FloatingActionButton fabScan;
 
     public ShoppingListFragment shoppingListFragment;
+    public PantryFragment pantryFragment;
 
     private void animateFab(int position) {
         switch (position) {
@@ -104,8 +105,9 @@ public class GroceryFragment extends Fragment {
     private void setupViewPager(ViewPager viewPager) {
         Adapter adapter = new Adapter(getChildFragmentManager());
         shoppingListFragment = new ShoppingListFragment();
+        pantryFragment = new PantryFragment();
         adapter.addFragment(shoppingListFragment, "Shopping List");
-        adapter.addFragment(new PantryFragment(), "Pantry");
+        adapter.addFragment(pantryFragment, "Pantry");
         viewPager.setAdapter(adapter);
     }
 

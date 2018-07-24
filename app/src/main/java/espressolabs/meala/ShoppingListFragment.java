@@ -68,6 +68,15 @@ public class ShoppingListFragment extends ItemListFragment {
         // Required empty public constructor
     }
 
+    @Override
+    protected void swipeItemLeft(ShoppingListAdapter.ViewHolder vh){
+        super.deleteItem(vh);
+    }
+
+    @Override
+    protected void swipeItemRight(ShoppingListAdapter.ViewHolder vh){
+        super.archiveItem(vh);
+    }
 
     public void openAddItemDialog() {
         ItemDialogFragment itemDialogFragment = new ItemDialogFragment();

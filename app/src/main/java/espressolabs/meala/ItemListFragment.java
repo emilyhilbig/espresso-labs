@@ -86,6 +86,31 @@ public abstract class ItemListFragment extends Fragment{
                              Bundle savedInstanceState) {
         return inflater.inflate(R.layout.recycler_list, null);
     }
+    protected void deleteItem(ShoppingListAdapter.ViewHolder vh){
+        // Delete - marks as deleted
+        ShoppingListItem item = vh.data;
+        Log.v(TAG, "Delete " + item);
+        item.delete();
+        dbRef.child("items").child(item.key).setValue(item);
+    }
+    protected void moveToShoppingList(ShoppingListAdapter.ViewHolder vh){
+        // Delete - marks as deleted
+        ShoppingListItem item = vh.data;
+        Log.v(TAG, "Moved to Shopping List " + item);
+        item.makeActive();
+        dbRef.child("items").child(item.key).setValue(item);
+        // todo: update shopping list when this is called
+    }
+    protected void archiveItem(ShoppingListAdapter.ViewHolder vh){
+        // Archive - move to pantry
+        ShoppingListItem item = vh.data;
+        Log.v(TAG, "Archive " + item);
+        item.archive();
+        dbRef.child("items").child(item.key).setValue(item);
+        // TODO: update pantry
+    }
+    protected abstract void swipeItemLeft(ShoppingListAdapter.ViewHolder vh);
+    protected abstract void swipeItemRight(ShoppingListAdapter.ViewHolder vh);
 
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
@@ -103,20 +128,12 @@ public abstract class ItemListFragment extends Fragment{
 
                             @Override
                             public void onSwipeLeft(ShoppingListAdapter.ViewHolder vh) {
-                                // Delete
-                                ShoppingListItem item = vh.data;
-                                Log.v(TAG, "Delete " + item);
-                                item.delete();
-                                dbRef.child("items").child(item.key).setValue(item);
+                                swipeItemLeft(vh);
                             }
 
                             @Override
                             public void onSwipeRight(ShoppingListAdapter.ViewHolder vh) {
-                                // Archive
-                                ShoppingListItem item = vh.data;
-                                Log.v(TAG, "Archive " + item);
-                                item.archive();
-                                dbRef.child("items").child(item.key).setValue(item);
+                                swipeItemRight(vh);
                             }
 
                         }

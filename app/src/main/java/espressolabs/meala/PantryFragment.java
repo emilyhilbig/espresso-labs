@@ -8,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import espressolabs.meala.ui.interaction.ShoppingListAdapter;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -18,8 +20,17 @@ public class PantryFragment extends ItemListFragment {
     @Override
     protected String getItemType() { return TYPE;}
 
+    @Override
+    protected void swipeItemLeft(ShoppingListAdapter.ViewHolder vh){
+        super.moveToShoppingList(vh);
+    }
+
+    @Override
+    protected void swipeItemRight(ShoppingListAdapter.ViewHolder vh){
+        super.deleteItem(vh);
+    }
+
     public PantryFragment() {
-        // Required empty public constructor
     }
 
     //    @Override
