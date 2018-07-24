@@ -24,8 +24,11 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.view.animation.OvershootInterpolator;
+import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -35,6 +38,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import espressolabs.meala.dialog.ItemDialogFragment;
 import espressolabs.meala.dialog.NameDialogFragment;
@@ -57,28 +61,61 @@ import espressolabs.meala.utils.FCMHelper;
 public class PlanningListFragment extends Fragment {
 
     public static final String TAG = "PlanningListFragment";
+    private ArrayList<MealListItem> items;
+
     private PlanningListAdapter adapter;
     private RecyclerView listView;
     private int day;
+    private String uid = "null";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setHasOptionsMenu(true);
+        items = new ArrayList<MealListItem>();
+        adapter = new PlanningListAdapter(items);
+
+        // setup Firebase user
+        // TODO this isn't used yet
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            uid = user.getUid();
+        }
+    }
+
+    public static PlanningListFragment newInstance(int day) {
+        PlanningListFragment fragment = new PlanningListFragment();
+        Bundle args = new Bundle();
+        args.putInt("day", day);
+        fragment.setArguments(args);
+
+        return fragment;
+    }
+
+    public void addMeal(MealListItem meal) {
+        Log.v(TAG, "add meal called");
+        if (adapter != null) {
+            Log.v(TAG, "Added meal");
+            adapter.addItem(meal);
+        }
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.planner_list, null);
+        View view = inflater.inflate(R.layout.planner_list, container, false);
         Bundle args = getArguments();
         day = args.getInt("day");
+
+        // Set the adapter
+        Context context = view.getContext();
+        listView = view.findViewById(R.id.planner_list);
+        listView.setLayoutManager(new LinearLayoutManager(context));
+
         String dayText = Integer.toString(day);
         ((TextView) view.findViewById(R.id.planner_list_title)).setText(dayText);
 
         return view;
-
     }
 
     @Override
@@ -89,34 +126,12 @@ public class PlanningListFragment extends Fragment {
         listView = view.findViewById(R.id.planner_list);
         listView.setLayoutManager(new LinearLayoutManager(context));
 
+       // final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>
+       //         (this, R.layout.planner_list, items);
+
         // Setup adapter
-        adapter = new PlanningListAdapter(context, listView);
+        adapter = new PlanningListAdapter(new ArrayList<>());
         listView.setAdapter(adapter);
         listView.setItemAnimator(new ItemAnimator(context, adapter));
-        adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-            @Override
-            public void onChanged() {
-                updateUI();
-            }
-
-            @Override
-            public void onItemRangeChanged(int positionStart, int itemCount) {
-                updateUI();
-            }
-
-            @Override
-            public void onItemRangeInserted(int positionStart, int itemCount) {
-                updateUI();
-            }
-
-            @Override
-            public void onItemRangeRemoved(int positionStart, int itemCount) {
-                updateUI();
-            }
-
-            private void updateUI() {
-
-            }
-        });
     }
 }
