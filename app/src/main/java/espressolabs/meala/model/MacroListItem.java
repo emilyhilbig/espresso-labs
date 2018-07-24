@@ -2,18 +2,20 @@ package espressolabs.meala.model;
 import com.google.firebase.database.DataSnapshot;
 
 public class MacroListItem {
-    public String measurement;
+    public String name;
     public float value;
+    public boolean isSet;
 
-    public MacroListItem(String measurement, float value) {
-        this.measurement = measurement;
+    public MacroListItem(String name, float value, boolean isSet) {
+        this.name = name;
         this.value = value;
+        this.isSet = isSet;
     }
 
     // need to get data from database then convert it to StatisticListItem
     public static MacroListItem fromSnapshot(DataSnapshot snapshot) {
         MacroListItem item = snapshot.getValue(MacroListItem.class);
-        item.measurement = snapshot.getKey();
+        item.name = snapshot.getKey();
 
         return item;
     }

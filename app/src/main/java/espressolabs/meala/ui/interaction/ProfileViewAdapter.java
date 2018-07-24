@@ -5,13 +5,15 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.EditText;
+import android.widget.Switch;
 
 import com.bumptech.glide.RequestManager;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
-import az.plainpie.PieView;
 import espressolabs.meala.R;
 import espressolabs.meala.ProfileFragment;
 import espressolabs.meala.model.MacroListItem;
@@ -54,7 +56,9 @@ public class ProfileViewAdapter extends RecyclerView.Adapter<ProfileViewAdapter.
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
         MacroListItem item = data.get(position);
-//        holder.statisticPieView.setPercentage(item.value);
+        holder.goalText.setText(String.valueOf(item.value));
+        holder.nameText.setText(item.name);
+        holder.settingSwitch.setChecked(item.isSet);
 
         /*
         if (mColumns <= 1) {
@@ -109,17 +113,20 @@ public class ProfileViewAdapter extends RecyclerView.Adapter<ProfileViewAdapter.
         //public final int[] defaultTextColors;
         public final int defaultBackgroundColor;
 
-        public PieView statisticPieView;
+        public TextView nameText;
+        public EditText goalText;
+        public Switch settingSwitch;
 
         public MacroListItem data;
 
-        public boolean isSwiped;
         public boolean isExpanded = false;
 
         public ViewHolder(ViewGroup vg) {
             super(vg);
 
-            statisticPieView = vg.findViewById(R.id.pieView);
+            goalText = vg.findViewById(R.id.setDailyGoal);
+            nameText = vg.findViewById(R.id.txtDailyGoal);
+            settingSwitch = vg.findViewById(R.id.setSwitch);
 
             /*defaultTextColors = new int[statisticPieView.length];
             for (int i = 0; i < defaultTextColors.length; i++) {
