@@ -14,15 +14,7 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-    <com.prolificinteractive.materialcalendarview.MaterialCalendarView
-        android:id="@+id/calendarView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/appbar"
-        app:mcv_firstDayOfWeek="sunday"
-        app:mcv_calendarMode="week"
-        app:mcv_selectionColor="#1a73e8"
-        />
+
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_add_plan"

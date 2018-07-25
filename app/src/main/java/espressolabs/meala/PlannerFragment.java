@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -109,6 +110,9 @@ public class PlannerFragment extends Fragment {
 
         // Set up calendar
         MaterialCalendarView calendar = view.findViewById(R.id.calendarView);
+        calendar.setVisibility(View.VISIBLE);
+        View tabs = view.findViewById(R.id.tabs);
+        tabs.setVisibility(View.GONE);
 
         // Setting ViewPager for each Tabs
         ViewPager viewPager = view.findViewById(R.id.viewpager);
