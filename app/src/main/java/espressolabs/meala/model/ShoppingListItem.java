@@ -35,6 +35,16 @@ public class ShoppingListItem {
         this.createdAt = System.currentTimeMillis();
     }
 
+    public ShoppingListItem(String createdBy, String name, String description, int price, boolean urgent, Status status) {
+        this.createdBy = createdBy;
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.urgent = urgent;
+        this.status = status;
+        this.createdAt = System.currentTimeMillis();
+    }
+
     public static ShoppingListItem fromSnapshot(DataSnapshot snapshot) {
         ShoppingListItem item = snapshot.getValue(ShoppingListItem.class);
         item.key = snapshot.getKey();
