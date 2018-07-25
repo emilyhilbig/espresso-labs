@@ -65,13 +65,10 @@ public class StatisticRecyclerViewAdapter extends RecyclerView.Adapter<Statistic
         holder.mTitle.setText(String.valueOf(mValues.get(position).title));
 */
         holder.pieView.setInnerText(item.name);
+        holder.pieView.setPercentage(item.value);
         if (item.value > 100)
         {
-            holder.pieView.setPercentage(100);
             holder.pieView.setPercentageBackgroundColor(Color.parseColor("#e23d3d"));
-        }
-        else {
-            holder.pieView.setPercentage(item.value);
         }
         //holder.textItem.setText(item.measurement);
 
