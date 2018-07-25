@@ -18,7 +18,7 @@ public class SearchActivity extends AppCompatActivity {
     MultiSlider caloriesSlider;
     MultiSlider timeSlider;
     MultiSlider ingredientsSlider;
-
+    
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

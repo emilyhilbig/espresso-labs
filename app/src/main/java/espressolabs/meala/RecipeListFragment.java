@@ -285,14 +285,14 @@ public class RecipeListFragment extends Fragment implements SwipeRefreshLayout.O
     }
 
     private void setupConnectionWatcher() {
-        if (BuildConfig.DEBUG) {
+        if (!BuildConfig.DEBUG) {
             Snackbar.make(getActivity().findViewById(android.R.id.content), R.string.snackbar_database_connecting, Snackbar.LENGTH_INDEFINITE).show();
         }
         fbDbConnectionWatcher = new FirebaseDatabaseConnectionWatcher();
         fbDbConnectionWatcher.addListener(new FirebaseDatabaseConnectionWatcher.OnConnectionChangeListener() {
             @Override
             public void onConnected() {
-                if (BuildConfig.DEBUG) {
+                if (!BuildConfig.DEBUG) {
                     Snackbar.make(getActivity().findViewById(android.R.id.content), R.string.snackbar_database_connected, Snackbar.LENGTH_SHORT).show();
                 }
             }
