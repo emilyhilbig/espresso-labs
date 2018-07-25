@@ -38,12 +38,14 @@
         app:mcv_firstDayOfWeek="sunday"
         app:mcv_calendarMode="week"
         app:mcv_selectionColor="@color/colorAccent"
+        android:background="@color/white"
         android:visibility="gone" />
 
     <android.support.design.widget.TabLayout
         android:id="@+id/tabs"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" android:background="@color/white"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
         app:tabIndicatorColor="@color/colorAccent"
         app:tabTextAppearance="@style/AppTabTextAppearance"/>
 

@@ -111,6 +111,7 @@ public class PlannerFragment extends Fragment {
         // Set up calendar
         MaterialCalendarView calendar = view.findViewById(R.id.calendarView);
         calendar.setVisibility(View.VISIBLE);
+        calendar.setTopbarVisible(false);
         View tabs = view.findViewById(R.id.tabs);
         tabs.setVisibility(View.GONE);
 
@@ -169,9 +170,30 @@ public class PlannerFragment extends Fragment {
             Toast.makeText(getContext(), Integer.toString(selectedDay), Toast.LENGTH_SHORT).show();
 
             PlanningListFragment p = adapter.getItem(selectedDay);
-            MealListItem testMeal = new MealListItem("Tristan", Integer.toString(selectedDay), "", MealListItem.Meal.SNACK);
-            testMeal.status = MealListItem.Status.ACTIVE;
-            p.addMeal(testMeal);
+            MealListItem testMeal1 = new MealListItem(
+                    "Tristan",
+                    Integer.toString(selectedDay) + "test1",
+                    "This is a test item1",
+                    MealListItem.Meal.SNACK);
+            MealListItem testMeal2 = new MealListItem(
+                    "Tristan",
+                    Integer.toString(selectedDay) + "Test2",
+                    "This is a test item2",
+                    MealListItem.Meal.DINNER);
+            MealListItem testMeal3 = new MealListItem(
+                    "Tristan",
+                    Integer.toString(selectedDay) + "TEST 3",
+                    "This is a test item3",
+                    MealListItem.Meal.LUNCH);
+            MealListItem testMeal4 = new MealListItem(
+                    "Tristan",
+                    Integer.toString(selectedDay) + "TEST 4",
+                    "This is a test item3",
+                    MealListItem.Meal.BREAKFAST);
+            p.addMeal(testMeal1);
+            p.addMeal(testMeal2);
+            p.addMeal(testMeal3);
+            p.addMeal(testMeal4);
         });
 
         return view;
@@ -212,5 +234,4 @@ public class PlannerFragment extends Fragment {
             return "Day " + position;
         }
     }
-
 }

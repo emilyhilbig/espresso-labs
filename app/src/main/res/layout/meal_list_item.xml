@@ -5,8 +5,6 @@
     android:id="@+id/meal_list_item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginEnd="@dimen/list_item_right_margin"
-    android:layout_marginStart="@dimen/list_item_left_margin"
 
     android:background="?android:colorBackground"
     android:orientation="vertical"
@@ -16,38 +14,35 @@
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingStart="?android:listPreferredItemPaddingLeft"
-        android:paddingEnd="?android:listPreferredItemPaddingRight">
+        android:paddingEnd="?android:listPreferredItemPaddingRight"
+        android:paddingStart="?android:listPreferredItemPaddingLeft">
 
         <TextView
             android:id="@+id/meal_list_item_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
             android:ellipsize="end"
             android:fontFamily="sans-serif"
             android:lines="1"
             android:textColor="@color/medium_grey"
             android:textSize="18sp"
-            tools:text="Text" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/meal_list_item_description"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_height="18dp"
             android:fontFamily="sans-serif"
             android:textColor="@color/medium_grey"
             android:textSize="14sp"
-            tools:text="Text" />
+            app:layout_constraintTop_toBottomOf="@+id/meal_list_item_name"/>
 
         <TextView
             android:id="@+id/meal_list_item_created_by"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            tools:text="Text" />
+            app:layout_constraintTop_toBottomOf="@id/meal_list_item_description"/>
 
     </android.support.constraint.ConstraintLayout>
 

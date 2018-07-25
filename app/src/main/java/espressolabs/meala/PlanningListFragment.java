@@ -23,6 +23,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import espressolabs.meala.firebase.FirebaseDatabaseConnectionWatcher;
 import espressolabs.meala.model.MealListItem;
@@ -38,7 +39,7 @@ import espressolabs.meala.ui.interaction.PlanningListAdapter;
 public class PlanningListFragment extends Fragment {
 
     public static final String TAG = "PlanningListFragment";
-    private ArrayList<MealListItem> items;
+    private List<MealListItem> items;
 
     private PlanningListAdapter adapter;
     private RecyclerView listView;
@@ -80,9 +81,9 @@ public class PlanningListFragment extends Fragment {
     }
 
     public void addMeal(MealListItem meal) {
+        planDatabase.child(Integer.toString(day)).child(meal.meal.toString()).setValue(meal);
+
         if (adapter != null) {
-            Log.v(TAG, "Added meal");
-            planDatabase.child(Integer.toString(day)).child(meal.meal.toString()).setValue(meal);
             adapter.addItem(meal);
         }
     }
@@ -92,13 +93,10 @@ public class PlanningListFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.planner_list, container, false);
 
-        // Set the adapter
+        // Set the listview
         Context context = view.getContext();
         listView = view.findViewById(R.id.planner_list);
         listView.setLayoutManager(new LinearLayoutManager(context));
-
-        String dayText = Integer.toString(day);
-        ((TextView) view.findViewById(R.id.planner_list_title)).setText(dayText);
 
         return view;
     }
@@ -106,10 +104,6 @@ public class PlanningListFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         Context context = getContext();
-
-        // Setup RecyclerView
-        listView = view.findViewById(R.id.planner_list);
-        listView.setLayoutManager(new LinearLayoutManager(context));
 
         // Setup adapter
         adapter = new PlanningListAdapter(items);
@@ -123,8 +117,6 @@ public class PlanningListFragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 day = dataSnapshot.getValue(Integer.class);
-                String dayText = Integer.toString(day);
-                ((TextView) view.findViewById(R.id.planner_list_title)).setText(dayText);
             }
 
             @Override
@@ -140,11 +132,23 @@ public class PlanningListFragment extends Fragment {
                 DataSnapshot plan = dataSnapshot.child(Integer.toString(day));
                 if (plan.exists()) {
                     Log.v(TAG, plan.toString());
-                    String snackKey = MealListItem.Meal.SNACK.toString();
-                    MealListItem snack = plan.child(snackKey).getValue(MealListItem.class);
-                    items.add(snack);
-                    adapter.setItems(items);
 
+                    String snackKey = MealListItem.Meal.SNACK.toString();
+                    String breakfastKey = MealListItem.Meal.BREAKFAST.toString();
+                    String lunchKey = MealListItem.Meal.LUNCH.toString();
+                    String dinnerKey = MealListItem.Meal.DINNER.toString();
+
+                    String[] keys = {snackKey, breakfastKey, lunchKey, dinnerKey};
+
+                    items.clear();
+                    for (String key : keys){
+                        MealListItem meal = plan.child(key).getValue(MealListItem.class);
+                        if (meal != null) {
+                            items.add(meal);
+                        }
+                    }
+
+                    adapter.setItems(items);
                 }
             }
 
@@ -154,5 +158,7 @@ public class PlanningListFragment extends Fragment {
             }
         };
         planDatabase.addValueEventListener(planListener);
+
+        adapter.update();
     }
 }
