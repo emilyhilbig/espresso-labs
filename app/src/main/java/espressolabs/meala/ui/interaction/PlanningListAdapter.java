@@ -46,21 +46,13 @@ public class PlanningListAdapter extends RecyclerView.Adapter<PlanningListAdapte
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
-        MealListItem item = data.get(position);
+        holder.data = data.get(position);
 
-        // TODO move all this to ViewHolder class below
-        // Reset values used by animation
-        holder.itemView.getLayoutParams().height = LinearLayout.LayoutParams.WRAP_CONTENT;
-        holder.resetBackgroundColor();
-        holder.resetTextColor();
-        holder.isExpanded = expandedItemKeys.contains(item.key);
+        holder.nameTextView.setText(holder.data.name);
 
-        holder.nameTextView.setText(item.name);
+        holder.descriptionTextView.setVisibility((holder.data.description.length() > 0) ? View.VISIBLE : View.GONE);
+        holder.descriptionTextView.setText(holder.data.description);
 
-        holder.descriptionTextView.setVisibility((item.description.length() > 0) ? View.VISIBLE : View.GONE);
-        holder.descriptionTextView.setText(item.description);
-
-        holder.data = item;
     }
 
     @Override
@@ -77,7 +69,6 @@ public class PlanningListAdapter extends RecyclerView.Adapter<PlanningListAdapte
         if (index >= 0 && index <= data.size() - 1) {
             ViewHolder vh = (ViewHolder) newHolder;
 
-            vh.isSwiped = false;
             expandedItemKeys.remove(vh.data.key);
 
             data.remove(index);
@@ -87,8 +78,10 @@ public class PlanningListAdapter extends RecyclerView.Adapter<PlanningListAdapte
 
     public void addItem(MealListItem item) {
         data.add(item);
+
+        notifyDataSetChanged();
         Log.v(TAG, data.toString());
-        notifyItemInserted(data.indexOf(item));
+        //notifyItemInserted(data.indexOf(item));
     }
 
     public void setItems(Collection<MealListItem> items) {
@@ -133,9 +126,6 @@ public class PlanningListAdapter extends RecyclerView.Adapter<PlanningListAdapte
 
         public MealListItem data;
 
-        public boolean isSwiped;
-        public boolean isExpanded = false;
-
         public ViewHolder(View vg) {
             super(vg);
 
@@ -155,16 +145,6 @@ public class PlanningListAdapter extends RecyclerView.Adapter<PlanningListAdapte
             }
 
             defaultBackgroundColor = ((ColorDrawable) itemView.getBackground()).getColor();
-        }
-
-        public void resetTextColor() {
-            for (int i = 0; i < defaultTextColors.length; i++) {
-                textViews[i].setTextColor(defaultTextColors[i]);
-            }
-        }
-
-        public void resetBackgroundColor() {
-            itemView.setBackgroundColor(defaultBackgroundColor);
         }
 
     }

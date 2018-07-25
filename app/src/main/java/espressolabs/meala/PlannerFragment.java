@@ -85,7 +85,6 @@ public class PlannerFragment extends Fragment {
         database = FirebaseDatabase.getInstance();
         planDatabase = database.getReference().child("plan");
 
-        planDatabase.child("20180724").setValue("test");
         planDatabase.child("current").setValue(selectedDay);
 
         // Subscribe to topic which broadcasts the new item notifications
@@ -166,7 +165,6 @@ public class PlannerFragment extends Fragment {
             Toast.makeText(getContext(), Integer.toString(selectedDay), Toast.LENGTH_SHORT).show();
 
             PlanningListFragment p = adapter.getItem(selectedDay);
-            Log.v(TAG, "logging");
             MealListItem testMeal = new MealListItem("Tristan", Integer.toString(selectedDay), "", MealListItem.Meal.SNACK);
             testMeal.status = MealListItem.Status.ACTIVE;
             p.addMeal(testMeal);
@@ -193,8 +191,6 @@ public class PlannerFragment extends Fragment {
         @Override
         public PlanningListFragment getItem(int day) {
             int index = day % mFrags.size();
-            Log.v(TAG, "Day hash: " + Integer.toString(day) + "\n" +
-            "index: " + Integer.toString(index));
 
             PlanningListFragment fragment = mFrags.get(index);
             fragment.setDay(day);

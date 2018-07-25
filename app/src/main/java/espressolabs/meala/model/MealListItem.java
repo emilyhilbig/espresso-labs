@@ -42,7 +42,7 @@ public class MealListItem {
 
     @Override
     public String toString() {
-        return "ShoppingListItem{" +
+        return "MealListItem{" +
                 "key='" + key + '\'' +
                 ", createdBy='" + createdBy + '\'' +
                 ", name='" + name + '\'' +
