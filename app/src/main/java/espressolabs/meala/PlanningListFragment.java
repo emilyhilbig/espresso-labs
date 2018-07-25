@@ -68,6 +68,12 @@ public class PlanningListFragment extends Fragment {
     private int day;
     private String uid = "null";
 
+    private FirebaseDatabaseConnectionWatcher fbDbConnectionWatcher;
+    private FirebaseDatabase database;
+    private PresenceUpdater presenceUpdater;
+    private DatabaseReference planDatabase;
+    private SharedPreferences prefs;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,10 +98,15 @@ public class PlanningListFragment extends Fragment {
         return fragment;
     }
 
+    public void setDay(int day){
+        this.day = day;
+    }
+
     public void addMeal(MealListItem meal) {
         Log.v(TAG, "add meal called");
         if (adapter != null) {
             Log.v(TAG, "Added meal");
+            planDatabase.child(Integer.toString(day)).child(meal.key).setValue(meal);
             adapter.addItem(meal);
         }
     }
@@ -104,19 +115,17 @@ public class PlanningListFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.planner_list, container, false);
-        Bundle args = getArguments();
-        day = args.getInt("day");
+        //Bundle args = getArguments();
+        //day = args.getInt("day");
 
         // Set the adapter
         Context context = view.getContext();
         listView = view.findViewById(R.id.planner_list);
         listView.setLayoutManager(new LinearLayoutManager(context));
-        if (!items.isEmpty()) {
-       //     listView.findViewById(R.id.loading_planning_list).setVisibility(View.INVISIBLE);
-        }
+
 
         String dayText = Integer.toString(day);
-    //    ((TextView) view.findViewById(R.id.planner_list_title)).setText(dayText);
+        ((TextView) view.findViewById(R.id.planner_list_title)).setText(dayText);
 
         return view;
     }
@@ -129,12 +138,48 @@ public class PlanningListFragment extends Fragment {
         listView = view.findViewById(R.id.planner_list);
         listView.setLayoutManager(new LinearLayoutManager(context));
 
-       // final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>
-       //         (this, R.layout.planner_list, items);
-
         // Setup adapter
         adapter = new PlanningListAdapter(items);
         listView.setAdapter(adapter);
         listView.setItemAnimator(new ItemAnimator(context, adapter));
+
+        // Initializations
+        database = FirebaseDatabase.getInstance();
+        planDatabase = database.getReference().child("plan");
+
+        ValueEventListener currentListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.v(TAG, dataSnapshot.toString());
+                day = dataSnapshot.getValue(Integer.class);
+                String dayText = Integer.toString(day);
+                ((TextView) view.findViewById(R.id.planner_list_title)).setText(dayText);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
+            }
+        };
+        planDatabase.child("current").addValueEventListener(currentListener);
+
+        ValueEventListener planListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.v(TAG, dataSnapshot.toString());
+                day = dataSnapshot.getValue(Integer.class);
+                String dayText = Integer.toString(day);
+                ((TextView) view.findViewById(R.id.planner_list_title)).setText(dayText);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
+            }
+        };
+        planDatabase.addValueEventListener(planListener);
+
+        planDatabase.child("20180724").setValue("test");
+
     }
 }

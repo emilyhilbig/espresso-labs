@@ -1,7 +1,10 @@
 package espressolabs.meala;
 
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -26,9 +29,23 @@ import java.util.List;
 import java.util.Calendar;
 
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
+
+
+import espressolabs.meala.firebase.FirebaseDatabaseConnectionWatcher;
 import espressolabs.meala.model.MealListItem;
+import espressolabs.meala.runnables.PresenceUpdater;
 import espressolabs.meala.ui.interaction.PlanningListAdapter;
 import espressolabs.meala.PlanningListFragment;
+import espressolabs.meala.utils.FCMHelper;
 
 
 /**
@@ -42,6 +59,17 @@ public class PlannerFragment extends Fragment {
     private int selectedDay;
     private static final String TAG = "PlannerFragment";
 
+    public final String FIREBASE_TOPIC_ADD_MEAL = "add_meal";
+
+    private FirebaseDatabaseConnectionWatcher fbDbConnectionWatcher;
+    private FirebaseDatabase database;
+    private PresenceUpdater presenceUpdater;
+    private DatabaseReference planDatabase;
+    private SharedPreferences prefs;
+
+    private DatabaseReference mDatabase;
+
+
     public PlannerFragment() {
         // Required empty public constructor
         selectedDay = 0;
@@ -50,6 +78,18 @@ public class PlannerFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Context context = getContext();
+
+        // Initializations
+        database = FirebaseDatabase.getInstance();
+        planDatabase = database.getReference().child("plan");
+
+        planDatabase.child("20180724").setValue("test");
+        planDatabase.child("current").setValue(selectedDay);
+
+        // Subscribe to topic which broadcasts the new item notifications
+        FirebaseMessaging.getInstance().subscribeToTopic(FIREBASE_TOPIC_ADD_MEAL);
     }
 
     @Override
@@ -93,6 +133,7 @@ public class PlannerFragment extends Fragment {
                 Log.v(TAG, "Changing date selected to: " + Integer.toString(selectedDay));
 
                 viewPager.setCurrentItem(date.getDay());
+                planDatabase.child("current").setValue(selectedDay);
             }
         });
 
@@ -115,6 +156,7 @@ public class PlannerFragment extends Fragment {
 
                 calendar.setDateSelected(c, false);
                 calendar.setDateSelected(jcal, true);
+                planDatabase.child("current").setValue(selectedDay);
             }
 
         });
@@ -143,7 +185,7 @@ public class PlannerFragment extends Fragment {
 
         public Adapter(FragmentManager manager) {
             super(manager);
-            for (int i = 0; i <= 32; i++) { // create one for each day of the month, plus each end
+            for (int i = 0; i <= 8; i++) { // create one for each day of the month, plus each end
                 mFrags.add(PlanningListFragment.newInstance(i));
             }
         }
@@ -155,13 +197,14 @@ public class PlannerFragment extends Fragment {
             "index: " + Integer.toString(index));
 
             PlanningListFragment fragment = mFrags.get(index);
+            fragment.setDay(day);
 
             return fragment;
         }
 
         @Override
         public int getCount() {
-            return mFrags.size();
+            return 100;
         }
 
         @Override

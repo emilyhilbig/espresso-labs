@@ -70,6 +70,9 @@ public class MealListItem {
     }
 
     public enum Meal {
-        BREAKFAST, LUNCH, DINNER, SNACK
+        BREAKFAST,
+        LUNCH,
+        DINNER,
+        SNACK
     }
 }
