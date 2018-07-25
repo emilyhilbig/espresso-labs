@@ -1,5 +1,7 @@
 package espressolabs.meala.model;
 
+import android.util.Log;
+
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
@@ -42,7 +44,7 @@ public class ShoppingListItem {
 
     @Override
     public boolean equals(Object obj) {
-        return obj != null && obj instanceof ShoppingListItem && key.equals(((ShoppingListItem) obj).key);
+        return obj != null && key != null && obj instanceof ShoppingListItem && key.equals(((ShoppingListItem) obj).key);
     }
 
     @Override
@@ -74,6 +76,10 @@ public class ShoppingListItem {
     @Exclude
     public boolean isActive() {
         return status == Status.ACTIVE;
+    }
+
+    public boolean isArchived(){
+        return status == Status.ARCHIVED;
     }
 
     public enum Status {

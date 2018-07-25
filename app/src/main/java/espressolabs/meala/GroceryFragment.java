@@ -12,14 +12,29 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.JsonReader;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.google.android.gms.common.util.JsonUtils;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import espressolabs.meala.model.ShoppingListItem;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -48,12 +63,6 @@ public class GroceryFragment extends Fragment {
                 break;
         }
     }
-
-
-    public void Recipe() {
-        // Required empty public constructor
-    }
-
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -160,6 +169,47 @@ public class GroceryFragment extends Fragment {
 
     public void handleScannedBarcode(Intent data){
         String barcode = data.getStringExtra("barcode");
-        Toast.makeText(getContext(), barcode, Toast.LENGTH_LONG).show();
+
+        // Instantiate the RequestQueue
+        RequestQueue queue = Volley.newRequestQueue(getContext());
+        String url = "https://api.edamam.com/api/food-database/parser?app_key=e473e92b642d9dd7af3c456a06067234&app_id=1449a83d&upc="
+                + barcode;
+
+        // Request a string response from the provided URL.
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                (String response) -> {
+                    JSONObject object = null;
+                    try {
+                        object = new JSONObject(response);
+                    }
+                    catch (Exception e){
+                        e.printStackTrace();
+                    }
+//                    Log.d("object",object.toString());
+                    String item = parseResponse(object);
+                    if(!item.isEmpty()){
+                        pantryFragment.createArchivedItem(item,"",0,false);
+                    }
+//                    Toast.makeText(getContext(), "Response is: " +object, Toast.LENGTH_LONG).show();
+                }, (VolleyError error)-> {
+            Toast.makeText(getContext(), "Error: " +error.getMessage(), Toast.LENGTH_LONG).show();
+        });
+
+// Add the request to the RequestQueue.
+        queue.add(stringRequest);
+    }
+
+    private String parseResponse(JSONObject object){
+        if(object == null){
+            return "";
+        }
+        String name = "";
+        try {
+            name = ((JSONObject) object.getJSONArray("hints").get(0)).getJSONObject("food").getString("label");
+        }
+        catch (JSONException e){
+            e.printStackTrace();
+        }
+        return name;
     }
 }

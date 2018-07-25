@@ -198,7 +198,7 @@ public abstract class ItemListFragment extends Fragment{
 //            }
 //        });
 
-        // Load initial data need a listbased event listener
+        // Load initial data need a list based event listener
         dbRef.child("items").orderByChild("status").equalTo(getItemStatus()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -235,6 +235,7 @@ public abstract class ItemListFragment extends Fragment{
                         Log.v(TAG, "Changed " + dataSnapshot.toString());
                         ShoppingListItem item = ShoppingListItem.fromSnapshot(dataSnapshot);
                         adapter.updateItem(item);
+                        adapter.notifyDataSetChanged();
                     }
 
                     @Override
@@ -447,6 +448,19 @@ public abstract class ItemListFragment extends Fragment{
         lastAddedOwnKey = ref.getKey();
         // sendItemNotification(listItem);
     }
+
+    public void createArchivedItem(String itemName, String itemDescription, int itemPrice, boolean itemUrgent) {
+        ShoppingListItem listItem = new ShoppingListItem(name, itemName, itemDescription, itemPrice, itemUrgent);
+        listItem.status = ShoppingListItem.Status.ARCHIVED;
+
+        DatabaseReference ref = dbRef.child("items").push();
+        ref.setValue(listItem);
+        listItem.key = ref.getKey();
+        adapter.updateItem(listItem);
+        lastAddedOwnKey = listItem.key;
+        // sendItemNotification(listItem);
+    }
+
 
     public void openNameChangeDialog() {
         NameDialogFragment nameDialogFragment = NameDialogFragment.newInstance(this.name);
