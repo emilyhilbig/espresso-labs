@@ -34,7 +34,10 @@
             android:name=".MainActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"/>
-        <activity android:name=".SearchActivity" />
+        <activity
+            android:name=".SearchActivity"
+            android:windowSoftInputMode="adjustResize"
+            android:parentActivityName=".MainActivity"/>
         <activity
             android:name=".ScannerActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"

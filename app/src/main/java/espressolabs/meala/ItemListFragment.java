@@ -228,6 +228,7 @@ public abstract class ItemListFragment extends Fragment{
                                 listView.scrollToPosition(0);
                             }
                         }
+                        adapter.notifyDataSetChanged();
                     }
 
                     @Override
@@ -243,11 +244,14 @@ public abstract class ItemListFragment extends Fragment{
                         Log.v(TAG, "Removed " + dataSnapshot.toString());
                         ShoppingListItem item = ShoppingListItem.fromSnapshot(dataSnapshot);
                         adapter.removeItem(item);
+
+                        adapter.notifyDataSetChanged();
                     }
 
                     @Override
                     public void onChildMoved(@NonNull DataSnapshot dataSnapshot, String s) {
                         Log.v(TAG, "Moved " + dataSnapshot.toString());
+                        adapter.notifyDataSetChanged();
                     }
 
                     @Override
@@ -279,12 +283,16 @@ public abstract class ItemListFragment extends Fragment{
     }
 
     private void setupConnectionWatcher() {
-        Snackbar.make(getActivity().findViewById(android.R.id.content), R.string.snackbar_database_connecting, Snackbar.LENGTH_INDEFINITE).show();
+        if (!BuildConfig.DEBUG) {
+            Snackbar.make(getActivity().findViewById(android.R.id.content), R.string.snackbar_database_connecting, Snackbar.LENGTH_INDEFINITE).show();
+        }
         fbDbConnectionWatcher = new FirebaseDatabaseConnectionWatcher();
         fbDbConnectionWatcher.addListener(new FirebaseDatabaseConnectionWatcher.OnConnectionChangeListener() {
             @Override
             public void onConnected() {
-                Snackbar.make(getActivity().findViewById(android.R.id.content), R.string.snackbar_database_connected, Snackbar.LENGTH_SHORT).show();
+                if (!BuildConfig.DEBUG) {
+                    Snackbar.make(getActivity().findViewById(android.R.id.content), R.string.snackbar_database_connected, Snackbar.LENGTH_SHORT).show();
+                }
             }
 
             @Override
@@ -450,8 +458,8 @@ public abstract class ItemListFragment extends Fragment{
     }
 
     public void createArchivedItem(String itemName, String itemDescription, int itemPrice, boolean itemUrgent) {
-        ShoppingListItem listItem = new ShoppingListItem(name, itemName, itemDescription, itemPrice, itemUrgent);
-        listItem.status = ShoppingListItem.Status.ARCHIVED;
+        ShoppingListItem listItem = new ShoppingListItem(name, itemName, itemDescription, itemPrice, itemUrgent, ShoppingListItem.Status.ARCHIVED);
+//        listItem.status = ShoppingListItem.Status.ARCHIVED;
 
         DatabaseReference ref = dbRef.child("items").push();
         ref.setValue(listItem);

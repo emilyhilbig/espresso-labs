@@ -1,28 +1,199 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView android:id="@+id/ScrollView01"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".SearchActivity"
-    tools:layout_editor_absoluteY="25dp">
+    android:fillViewport="true"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
 
-    <android.support.v7.widget.SearchView
-        android:id="@+id/searchView"
-        android:layout_width="0dp"
-        android:layout_height="51dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:showAsAction="always"
-        app:iconifiedByDefault="false"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0">
-        <requestFocus />
-    </android.support.v7.widget.SearchView>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:id="@+id/container">
 
-</android.support.constraint.ConstraintLayout>
+        <android.support.v7.widget.SearchView
+            android:id="@+id/searchView"
+            android:layout_width="match_parent"
+            android:layout_height="51dp"
+            android:showAsAction="always"
+            android:layout_marginTop="8dp"
+            app:iconifiedByDefault="false" >
+
+
+        </android.support.v7.widget.SearchView>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="16dp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="?android:attr/listDivider" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="16dp"
+            android:paddingTop="16dp"
+            android:text="Filter by" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="?android:attr/listDivider" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="32dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Diet:" />
+            <TextView
+                android:id="@+id/diet_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                />
+        </LinearLayout>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="16dp" />
+
+        <com.savvyapps.togglebuttonlayout.ToggleButtonLayout
+            android:id="@+id/toggle_diet"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_marginLeft="1dp"
+            android:layout_marginRight="1dp"
+            app:allowDeselection="true"
+            app:customLayout="@layout/view_toggle_button"
+            app:dividerColor="@android:color/darker_gray"
+            app:menu="@menu/toggles_diet"
+            app:selectedColor="?attr/colorAccent"
+            app:toggleMode="even" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="32dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Calories per serving:" />
+            <TextView
+                android:id="@+id/calories_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                />
+            />
+        </LinearLayout>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="16dp" />
+
+        <io.apptik.widget.MultiSlider
+            android:id="@+id/calories_slider"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            app:drawThumbsApart="true"
+
+            app:stepsThumbsApart="5"
+            app:thumbNumber="2"
+            app:scaleStep="10"
+            app:scaleMax="1000"/>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="32dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ready in:" />
+            <TextView
+                android:id="@+id/time_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                />
+        </LinearLayout>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="16dp" />
+
+        <io.apptik.widget.MultiSlider
+            android:id="@+id/time_slider"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            app:drawThumbsApart="true"
+
+            app:stepsThumbsApart="5"
+            app:thumbNumber="2"
+            app:scaleStep="5"
+            app:scaleMax="180"/>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="32dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Number of ingredients:" />
+            <TextView
+                android:id="@+id/ingredients_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                />
+        </LinearLayout>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="16dp" />
+
+        <io.apptik.widget.MultiSlider
+            android:id="@+id/ingredients_slider"
+            android:layout_width="210dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            app:drawThumbsApart="true"
+
+            app:stepsThumbsApart="5"
+            app:thumbNumber="1"
+            app:scaleMax="10"/>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="64dp" />
+
+    </LinearLayout>
+</ScrollView>
