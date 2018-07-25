@@ -160,13 +160,19 @@ public class StatisticFragment extends Fragment {
 
         // Load initial data
         ArrayList<StatisticListItem> items = new ArrayList<>(1);
-        items.add(new StatisticListItem("%", "Calories",50));
-        items.add(new StatisticListItem("%", "Fat",90));
-        Log.d("itemtype", itemtype);
         if (itemtype.equals("Daily")) {
+            items.add(new StatisticListItem("%", "Calories",50));
+            items.add(new StatisticListItem("%", "Fat",90));
             items.add(new StatisticListItem("%", "Protein", 80));
             items.add(new StatisticListItem("%", "Sugars", 90));
             items.add(new StatisticListItem("%", "Carbs", 70));
+        }
+        else {
+            items.add(new StatisticListItem("%", "Calories",70));
+            items.add(new StatisticListItem("%", "Fat",120)); // if above 100, show 100 and display red
+            items.add(new StatisticListItem("%", "Protein", 60));
+            items.add(new StatisticListItem("%", "Sugars", 70));
+            items.add(new StatisticListItem("%", "Carbs", 50));
         }
         adapter.setItems(items);
 
@@ -283,12 +289,16 @@ public class StatisticFragment extends Fragment {
     }
 
     private void setupConnectionWatcher() {
-        Snackbar.make(getActivity().findViewById(android.R.id.content), R.string.snackbar_database_connecting, Snackbar.LENGTH_INDEFINITE).show();
+        if (!BuildConfig.DEBUG) {
+            Snackbar.make(getActivity().findViewById(android.R.id.content), R.string.snackbar_database_connecting, Snackbar.LENGTH_INDEFINITE).show();
+        }
         fbDbConnectionWatcher = new FirebaseDatabaseConnectionWatcher();
         fbDbConnectionWatcher.addListener(new FirebaseDatabaseConnectionWatcher.OnConnectionChangeListener() {
             @Override
             public void onConnected() {
-                Snackbar.make(getActivity().findViewById(android.R.id.content), R.string.snackbar_database_connected, Snackbar.LENGTH_SHORT).show();
+                if (!BuildConfig.DEBUG) {
+                    Snackbar.make(getActivity().findViewById(android.R.id.content), R.string.snackbar_database_connected, Snackbar.LENGTH_SHORT).show();
+                }
             }
 
             @Override

@@ -1,4 +1,5 @@
 package espressolabs.meala.ui.interaction;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -63,8 +64,12 @@ public class StatisticRecyclerViewAdapter extends RecyclerView.Adapter<Statistic
 
         holder.mTitle.setText(String.valueOf(mValues.get(position).title));
 */
-        holder.pieView.setPercentage(item.value);
         holder.pieView.setInnerText(item.name);
+        holder.pieView.setPercentage(item.value);
+        if (item.value > 100)
+        {
+            holder.pieView.setPercentageBackgroundColor(Color.parseColor("#e23d3d"));
+        }
         //holder.textItem.setText(item.measurement);
 
         holder.itemView.setOnClickListener(v -> {
