@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/toggle_b"
+        android:title="Balanced" />
+    <item
+        android:id="@+id/toggle_hp"
+        android:title="High-Protein" />
+    <item
+        android:id="@+id/toggle_hf"
+        android:title="High-Fiber" />
+    <item
+        android:id="@+id/toggle_lf"
+        android:title="Low-Fat" />
+    <item
+        android:id="@+id/toggle_lc"
+        android:title="Low-Carb" />
+    <item
+        android:id="@+id/toggle_ls"
+        android:title="Low-Sodium" />
+</menu>

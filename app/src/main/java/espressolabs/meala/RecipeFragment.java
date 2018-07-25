@@ -85,10 +85,11 @@ public class RecipeFragment extends Fragment {
     private void setupViewPager(ViewPager viewPager) {
         viewPager.setOffscreenPageLimit(2);
         Adapter adapter = new Adapter(getChildFragmentManager());
-        adapter.addFragment(RecipeListFragment.newInstance(1, "trending"), "Trending");
+        adapter.addFragment(RecipeListFragment.newInstance(1, "todo:removeme"), "Trending");
         adapter.addFragment(RecipeListFragment.newInstance(2, SHORTLIST), "Shortlist");
         adapter.addFragment(RecipeListFragment.newInstance(2, FAVORITES), "Favorites");
         viewPager.setAdapter(adapter);
+        viewPager.setCurrentItem(1);
     }
 
     static class Adapter extends FragmentPagerAdapter {
