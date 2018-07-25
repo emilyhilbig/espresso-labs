@@ -112,21 +112,7 @@ public class ProfileFragment extends Fragment {
         dbRef = database.getReference();
         FCMHelper.init(context);
 
-        ArrayList<MacroListItem> items2 = new ArrayList<>(1);
-        items2.add(new MacroListItem("Calories",1740, true));
-        items2.add(new MacroListItem("Fat",70, true)); // gram
-        items2.add(new MacroListItem("Protein",70, true)); // gram
-        items2.add(new MacroListItem("Carbs",310, true)); // gram
-        items2.add(new MacroListItem("Sugar",90, true)); // gram
-        items2.add(new MacroListItem("Sodium", (float)2.3, true)); // gram'
-        for(MacroListItem item : items2)
-        {
-            dbRef.child("user").child("XuZYv8FxBBfjdiRIeQ1szaLAlhA3").child("goals").child(item.name).setValue(item);
-            dbRef.child("user").child("0M7KbpeXQEhh654RHSNoa21fWGf2").child("goals").child(item.name).setValue(item);
-        }
-
         // Load initial data
-        ArrayList<MacroListItem> items = new ArrayList<>(1);
         dbRef.child("user").child(this.user.getUid()).child("goals").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

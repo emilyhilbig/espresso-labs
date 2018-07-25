@@ -20,6 +20,8 @@ import android.view.animation.Interpolator;
 import android.view.animation.OvershootInterpolator;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -29,6 +31,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 import espressolabs.meala.firebase.FirebaseDatabaseConnectionWatcher;
+import espressolabs.meala.model.MacroListItem;
 import espressolabs.meala.model.StatisticListItem;
 import espressolabs.meala.runnables.ActiveUsersUpdater;
 import espressolabs.meala.runnables.PresenceUpdater;
@@ -158,39 +161,67 @@ public class StatisticFragment extends Fragment {
             }
         });
 
-        // Load initial data
-        ArrayList<StatisticListItem> items = new ArrayList<>(1);
-        if (itemtype.equals("Daily")) {
-            items.add(new StatisticListItem("%", "Calories",50));
-            items.add(new StatisticListItem("%", "Fat",90));
-            items.add(new StatisticListItem("%", "Protein", 80));
-            items.add(new StatisticListItem("%", "Sugars", 90));
-            items.add(new StatisticListItem("%", "Carbs", 70));
-        }
-        else {
-            items.add(new StatisticListItem("%", "Calories",70));
-            items.add(new StatisticListItem("%", "Fat",120)); // if above 100, show 100 and display red
-            items.add(new StatisticListItem("%", "Protein", 60));
-            items.add(new StatisticListItem("%", "Sugars", 70));
-            items.add(new StatisticListItem("%", "Carbs", 50));
-        }
-        adapter.setItems(items);
-
-        /*// Initializations
+        // Initializations
         prefs = PreferenceManager.getDefaultSharedPreferences(context);
         database = FirebaseDatabase.getInstance();
         dbRef = database.getReference();
         FCMHelper.init(context);
 
         // Load initial data
-        dbRef.child("items").orderByChild("status").equalTo("ACTIVE").addListenerForSingleValueEvent(new ValueEventListener() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        dbRef.child("user").child(user.getUid()).child("goals").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 ArrayList<StatisticListItem> items = new ArrayList<>((int) dataSnapshot.getChildrenCount());
                 for (DataSnapshot dsp : dataSnapshot.getChildren()) {
                     Log.v(TAG, "Single " + dsp.toString());
-                    StatisticListItem item = StatisticListItem.fromSnapshot(dsp);
-                    items.add(item);
+                    MacroListItem item = MacroListItem.fromSnapshot(dsp);
+                    StatisticListItem itemStatistic = null;
+                    if (itemtype.equals("Daily")) {
+                        switch (item.name) {
+                            case "Calories":
+                                itemStatistic = new StatisticListItem("%", "Calories", 600 / item.value * 100);
+                                break;
+                            case "Fat":
+                                itemStatistic = new StatisticListItem("%", "Fat", 60 / item.value * 100);
+                                break;
+                            case "Protein":
+                                itemStatistic = new StatisticListItem("%", "Protein", 30 / item.value * 100);
+                                break;
+                            case "Sugar":
+                                itemStatistic = new StatisticListItem("%", "Sugars", 60 / item.value * 100);
+                                break;
+                            case "Carbs":
+                                itemStatistic = new StatisticListItem("%", "Carbs", 200 / item.value * 100);
+                                break;
+                            case "Sodium":
+                                itemStatistic = new StatisticListItem("%", "Sodium", 2 / item.value * 100);
+                                break;
+                        }
+                    }
+                    else {
+                        switch (item.name) {
+                            case "Calories":
+                                itemStatistic = new StatisticListItem("%", "Calories", 8000 / (item.value * 7) * 100);
+                                break;
+                            case "Fat":
+                                itemStatistic = new StatisticListItem("%", "Fat", 500 / (item.value * 7) * 100);
+                                break;
+                            case "Protein":
+                                itemStatistic = new StatisticListItem("%", "Protein", 250 / (item.value * 7) * 100);
+                                break;
+                            case "Sugar":
+                                itemStatistic = new StatisticListItem("%", "Sugars", 360 / (item.value * 7) * 100);
+                                break;
+                            case "Carbs":
+                                itemStatistic = new StatisticListItem("%", "Carbs", 1500 / (item.value * 7) * 100);
+                                break;
+                            case "Sodium":
+                                itemStatistic = new StatisticListItem("%", "Sodium", 11 / item.value * 100);
+                                break;
+                        }
+                    }
+                    items.add(itemStatistic);
                 }
 
                 adapter.setItems(items);
@@ -200,7 +231,8 @@ public class StatisticFragment extends Fragment {
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Log.e(TAG, "Cancelled " + databaseError.toString());
             }
-        });*/
+        });
+
     }
 
 
