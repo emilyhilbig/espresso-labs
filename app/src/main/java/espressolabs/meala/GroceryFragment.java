@@ -191,8 +191,11 @@ public class GroceryFragment extends Fragment {
                         pantryFragment.createArchivedItem(item,"",0,false);
                     }
 //                    Toast.makeText(getContext(), "Response is: " +object, Toast.LENGTH_LONG).show();
-                }, (VolleyError error)-> {
-            Toast.makeText(getContext(), "Error: " +error.getMessage(), Toast.LENGTH_LONG).show();
+                },
+                (VolleyError error) -> {
+                    Toast.makeText(getContext(), "UPC not found!", Toast.LENGTH_LONG).show();
+                    // delay?
+                    shoppingListFragment.openAddItemDialog();
         });
 
 // Add the request to the RequestQueue.
