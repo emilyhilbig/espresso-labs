@@ -8,23 +8,36 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import espressolabs.meala.ui.interaction.ShoppingListAdapter;
+
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class PantryFragment extends Fragment {
+public class PantryFragment extends ItemListFragment {
 
-
-    public PantryFragment() {
-        // Required empty public constructor
-    }
-
+    public static final String TYPE = "Pantry Item";
+    @Override
+    protected String getItemType() { return TYPE;}
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_pantry, container, false);
+    protected void swipeItemLeft(ShoppingListAdapter.ViewHolder vh){
+        super.moveToShoppingList(vh);
     }
+
+    @Override
+    protected void swipeItemRight(ShoppingListAdapter.ViewHolder vh){
+        super.deleteItem(vh);
+    }
+
+    public PantryFragment() {
+    }
+
+    //    @Override
+//    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
+//                             Bundle savedInstanceState) {
+//        // Inflate the layout for this fragment
+//        return inflater.inflate(R.layout.fragment_pantry, container, false);
+//    }
 
 }

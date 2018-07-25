@@ -37,7 +37,7 @@
         <item name="android:background">?android:attr/listDivider</item>
     </style>
 
-    <style name="FullscreenTheme" >
+    <style name="FullscreenTheme" parent="MealATheme">
         <item name="android:actionBarStyle">@style/FullscreenActionBarStyle</item>
         <item name="android:windowActionBarOverlay">true</item>
         <item name="android:windowBackground">@null</item>

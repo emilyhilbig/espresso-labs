@@ -134,7 +134,7 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
         }
     }
 
-    public void addItem(ShoppingListItem item) {
+    public boolean addItem(ShoppingListItem item) {
         if (item.isActive()) {
             if (item.urgent) {
                 data.add(0, item);
@@ -153,10 +153,10 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
 
                 Log.v(TAG, "addItem position=" + firstNonUrgent);
             }
-
-
+            return true;
         } else {
             Log.v(TAG, "addItem not active");
+            return false;
         }
     }
 
@@ -183,6 +183,14 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
         if (index != -1) {
             data.set(index, item);
             notifyItemChanged(index);
+        }
+        else{
+            // THIS IS A TOTAL HACK, IT ONLY WORKS BECAUSE THERE IS TWO
+            if(item.isArchived()){
+                data.add(item);
+                notifyDataSetChanged();
+            }
+
         }
     }
 
