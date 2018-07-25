@@ -8,7 +8,11 @@ import android.support.design.widget.Snackbar;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.TextView;
+
+import espressolabs.meala.model.MacroListItem;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -99,8 +103,22 @@ public class LoginActivity extends BaseActivity implements
 
                         // Save user information to database for ease of use
                         DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference();
+
                         dbRef.child("user").child(user.getUid()).child("email").setValue(user.getEmail());
                         dbRef.child("user").child(user.getUid()).child("name").setValue(user.getDisplayName());
+
+                        // setup user initial setting
+                        ArrayList<MacroListItem> items = new ArrayList<>(1);
+                                                items.add(new MacroListItem("Calories",1740, true));
+                                                items.add(new MacroListItem("Fat",70, true)); // gram
+                                                items.add(new MacroListItem("Protein",70, true)); // gram
+                                                items.add(new MacroListItem("Carbs",310, true)); // gram
+                                                items.add(new MacroListItem("Sugar",90, true)); // gram
+                                                items.add(new MacroListItem("Sodium", (float)2.3, true)); // gram'
+                        for(MacroListItem item : items)
+                        {
+                            dbRef.child("user").child(user.getUid()).child("goals").child(item.name).setValue(item);
+                        }
 
                         // Save user name pref
                         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());

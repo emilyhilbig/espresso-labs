@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.EditText;
@@ -27,10 +28,17 @@ public class ProfileViewAdapter extends RecyclerView.Adapter<ProfileViewAdapter.
     private final RequestManager glide;
     private ArrayList<MacroListItem> data = new ArrayList<>();
 
-    public ProfileViewAdapter(ProfileFragment.OnStatisticClickListener listener, RequestManager glide, int columnCount) { //List<RecipeContent.Recipe> items,
+    private final ProfileViewAdapter.MyAdapterListener onChangeListener;
+
+    public interface MyAdapterListener {
+        void OnChangeListener(View v, MacroListItem item, EditText goalText, boolean hasFocus);
+    }
+
+    public ProfileViewAdapter(ProfileFragment.OnStatisticClickListener listener, RequestManager glide, ProfileViewAdapter.MyAdapterListener clickListener, int columnCount) { //List<RecipeContent.Recipe> items,
         //mValues = items;
         mListener = listener;
         mColumns = columnCount;
+        onChangeListener = clickListener;
         this.glide = glide;
     }
 
@@ -59,6 +67,8 @@ public class ProfileViewAdapter extends RecyclerView.Adapter<ProfileViewAdapter.
         holder.goalText.setText(String.valueOf(item.value));
         holder.nameText.setText(item.name);
         holder.settingSwitch.setChecked(item.isSet);
+
+        holder.goalText.setOnFocusChangeListener((v, hasFocus) -> onChangeListener.OnChangeListener(v, item, holder.goalText, hasFocus)); // maybe only need to listen to un-onFocusChange
 
         /*
         if (mColumns <= 1) {

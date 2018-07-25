@@ -6,6 +6,10 @@ public class MacroListItem {
     public float value;
     public boolean isSet;
 
+    public MacroListItem() {
+        // Default constructor required for calls to DataSnapshot.getValue(RecipeItem.class)
+    }
+
     public MacroListItem(String name, float value, boolean isSet) {
         this.name = name;
         this.value = value;

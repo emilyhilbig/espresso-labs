@@ -1,5 +1,7 @@
 package espressolabs.meala;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -13,7 +15,14 @@ import android.util.Log;
 import android.view.LayoutInflater;;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
+import android.view.animation.Interpolator;
+import android.view.animation.OvershootInterpolator;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.database.DataSnapshot;
@@ -25,6 +34,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import espressolabs.meala.firebase.FirebaseDatabaseConnectionWatcher;
 import espressolabs.meala.model.MacroListItem;
@@ -41,6 +52,7 @@ public class ProfileFragment extends Fragment {
     private int mColumnCount = 1;
     private ProfileFragment.OnStatisticClickListener mListener;
     public static final String TAG = "ProfileFragment";
+    private FirebaseUser user = null;
 
     private static final int STATE_STARTING = -1;
     private static final int STATE_LOADING = 0;
@@ -82,37 +94,27 @@ public class ProfileFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         Context context = getContext();
 
-        // update user name
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            this.user = user;
+        }
+
         TextView nameTextView = view.findViewById(R.id.txtName);
+        //Button saveButton = view.findViewById(R.id.btnSave);
 
         // Setup RecyclerView
         listView = view.findViewById(R.id.profile_list);
         listView.setLayoutManager(new LinearLayoutManager(context));
 
-        // Setup adapter
-        adapter = new ProfileViewAdapter(mListener, Glide.with(this), mColumnCount);
-        //adapter.setViewSize(prefs.getInt(PREFS_VIEW_SIZE, -1));
-        listView.setAdapter(adapter);
-        listView.setItemAnimator(new ItemAnimator(context, adapter));
-
-        // Load initial data (get data from firebase)
-        ArrayList<MacroListItem> items = new ArrayList<>(1);
-        items.add(new MacroListItem("Calories",1740, true));
-        items.add(new MacroListItem("Fat",70, true)); // gram
-        items.add(new MacroListItem("Protein",70, true)); // gram
-        items.add(new MacroListItem("Carbs",310, true)); // gram
-        items.add(new MacroListItem("Sugar",90, true)); // gram
-        items.add(new MacroListItem("Sodium", (float)2.3, true)); // gram
-        adapter.setItems(items);
-
-        /*// Initializations
+        // Initializations
         prefs = PreferenceManager.getDefaultSharedPreferences(context);
         database = FirebaseDatabase.getInstance();
         dbRef = database.getReference();
         FCMHelper.init(context);
 
         // Load initial data
-        dbRef.child("items").orderByChild("status").equalTo("ACTIVE").addListenerForSingleValueEvent(new ValueEventListener() {
+        ArrayList<MacroListItem> items = new ArrayList<>(1);
+        dbRef.child("user").child(this.user.getUid()).child("goals").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 ArrayList<MacroListItem> items = new ArrayList<>((int) dataSnapshot.getChildrenCount());
@@ -129,15 +131,117 @@ public class ProfileFragment extends Fragment {
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Log.e(TAG, "Cancelled " + databaseError.toString());
             }
-        });*/
+        });
 
-        // current user
-        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        nameTextView.setText(firebaseUser.getDisplayName());
+        // update current user name
+        nameTextView.setText(this.user.getDisplayName());
+
+        // Setup adapter
+        adapter = new ProfileViewAdapter(mListener, Glide.with(this),
+                (v, item, goalText, hasFocus) -> {
+                    if (!hasFocus) {
+                        item.value = Float.parseFloat(goalText.getText().toString());
+                        Map<String, Object> updates = new HashMap<>();
+                        updates.put("/user/" + this.user.getUid() + '/' + "goals" + '/' + item.name, item); // or if later know the key for each macro, then use key
+
+                        dbRef.updateChildren(updates);
+
+                        Toast.makeText(context, String.format("Added to goals"), Toast.LENGTH_SHORT).show();
+                    }
+                },
+                mColumnCount);
+
+        listView.setAdapter(adapter);
+        listView.setItemAnimator(new ItemAnimator(context, adapter));
+        /*
+        adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+            @Override
+            public void onChanged() {
+                updateUI();
+            }
+
+            @Override
+            public void onItemRangeChanged(int positionStart, int itemCount) {
+                updateUI();
+            }
+
+            @Override
+            public void onItemRangeInserted(int positionStart, int itemCount) {
+                updateUI();
+            }
+
+            @Override
+            public void onItemRangeRemoved(int positionStart, int itemCount) {
+                updateUI();
+            }
+
+            private void updateUI() {
+                listView.getItemAnimator().isRunning(() -> {
+                    if (adapter.getItemCount() > 0) {
+                        setUIState(STATE_LIST);
+                    } else {
+                        setUIState(STATE_EMPTY);
+                    }
+                });
+            }
+        });*/
     }
 
     public interface OnStatisticClickListener {
         //void onListFragmentInteraction(RecipeContent.Recipe item);
+    }
+
+    private void setUIState(int newState) {
+        View view = getView();
+        View[] views = new View[]{
+                view.findViewById(R.id.loading_statistic_list),
+                view.findViewById(R.id.empty_statistic_list),
+                view.findViewById(R.id.statistic_list)
+        };
+
+        int oldState = this.state;
+        this.state = newState;
+
+        if (oldState == STATE_STARTING) {
+            for (View v : views) v.setVisibility(View.GONE);
+            View newView = views[newState];
+            newView.setVisibility(View.VISIBLE);
+        } else {
+            if (oldState != newState) {
+                final View oldView = views[oldState];
+                View newView = views[newState];
+
+                oldView.setVisibility(View.VISIBLE);
+                newView.setVisibility(View.VISIBLE);
+                oldView.setAlpha(1);
+                newView.setAlpha(0);
+
+                int duration = 600;
+                Interpolator interpolator = new AccelerateInterpolator();
+
+                oldView.animate().alpha(0).setDuration(duration).setInterpolator(interpolator).setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animator) {
+                        oldView.setVisibility(View.GONE);
+                    }
+                }).start();
+                newView.animate().alpha(1).setDuration(duration).setInterpolator(interpolator).setListener(null).start();
+
+                if (newState == STATE_EMPTY) {
+                    View icon = view.findViewById(R.id.empty_list_icon);
+                    View text = view.findViewById(R.id.empty_list_text);
+
+                    icon.setRotation(0);
+                    icon.setTranslationX(-2000);
+                    icon.animate().setDuration(2000).translationX(0).rotation(3 * 360).setInterpolator(new DecelerateInterpolator(2f)).start();
+
+                    text.setAlpha(0);
+                    text.setScaleX(0);
+                    text.setScaleY(0);
+                    text.animate().setStartDelay(1000).setDuration(800).alpha(1).scaleY(1).scaleX(1).setInterpolator(new OvershootInterpolator(2f)).start();
+                }
+            }
+        }
     }
 
     private void setupConnectionWatcher() {
