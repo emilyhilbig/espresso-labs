@@ -11,5 +11,6 @@
 .externalNativeBuild
 .idea/assetWizardSettings.xml
 *.ser
-/keystore.properties
+
+keystore.properties
 google-services.json
