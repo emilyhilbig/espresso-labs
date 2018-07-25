@@ -41,8 +41,10 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 
+import espressolabs.meala.dialog.ShortlistDialogFragment;
 import espressolabs.meala.firebase.FirebaseDatabaseConnectionWatcher;
 import espressolabs.meala.model.MealListItem;
+import espressolabs.meala.model.RecipeItem;
 import espressolabs.meala.runnables.PresenceUpdater;
 import espressolabs.meala.ui.interaction.PlanningListAdapter;
 import espressolabs.meala.PlanningListFragment;
@@ -61,6 +63,7 @@ public class PlannerFragment extends Fragment {
     private static final String TAG = "PlannerFragment";
 
     public final String FIREBASE_TOPIC_ADD_MEAL = "add_meal";
+    public PlanningListFragment planningListFragment;
 
     private FirebaseDatabaseConnectionWatcher fbDbConnectionWatcher;
     private FirebaseDatabase database;
@@ -69,11 +72,20 @@ public class PlannerFragment extends Fragment {
     private SharedPreferences prefs;
 
     private DatabaseReference mDatabase;
+    private FirebaseAuth mAuth;
+    private FirebaseUser currentUser;
+
+    private ArrayList<String> shortlist = new ArrayList<>();
 
 
     public PlannerFragment() {
         // Required empty public constructor
-        selectedDay = 0;
+        Calendar jcal = Calendar.getInstance();
+        int year = jcal.get(Calendar.YEAR);
+        int month = jcal.get(Calendar.MONTH);
+        int day = jcal.get(Calendar.DAY_OF_MONTH);
+
+        selectedDay = year * 10000 + month * 100 + day;
     }
 
     @Override
@@ -86,7 +98,31 @@ public class PlannerFragment extends Fragment {
         database = FirebaseDatabase.getInstance();
         planDatabase = database.getReference().child("plan");
 
+        mAuth = FirebaseAuth.getInstance();
+        currentUser = mAuth.getCurrentUser();
+        String uid = currentUser.getUid();
+
         planDatabase.child("current").setValue(selectedDay);
+
+        DatabaseReference userDatabase = database.getReference().child("user").child(uid);
+        DatabaseReference shortlistDatabase = userDatabase.child("shortlist");
+
+        ValueEventListener shortlistListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot dsp : dataSnapshot.getChildren()) {
+                    Log.v(TAG, "Single " + dsp.toString());
+                    RecipeItem item = RecipeItem.fromSnapshot(dsp);
+                    shortlist.add(item.getTitle());
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
+            }
+        };
+        shortlistDatabase.addValueEventListener(shortlistListener);
 
         // Subscribe to topic which broadcasts the new item notifications
         FirebaseMessaging.getInstance().subscribeToTopic(FIREBASE_TOPIC_ADD_MEAL);
@@ -167,36 +203,27 @@ public class PlannerFragment extends Fragment {
 
         fabAdd = view.findViewById(R.id.fab_add_plan);
         fabAdd.setOnClickListener(v -> {
-            Toast.makeText(getContext(), Integer.toString(selectedDay), Toast.LENGTH_SHORT).show();
-
-            PlanningListFragment p = adapter.getItem(selectedDay);
-            MealListItem testMeal1 = new MealListItem(
-                    "Tristan",
-                    Integer.toString(selectedDay) + "test1",
-                    "This is a test item1",
-                    MealListItem.Meal.SNACK);
-            MealListItem testMeal2 = new MealListItem(
-                    "Tristan",
-                    Integer.toString(selectedDay) + "Test2",
-                    "This is a test item2",
-                    MealListItem.Meal.DINNER);
-            MealListItem testMeal3 = new MealListItem(
-                    "Tristan",
-                    Integer.toString(selectedDay) + "TEST 3",
-                    "This is a test item3",
-                    MealListItem.Meal.LUNCH);
-            MealListItem testMeal4 = new MealListItem(
-                    "Tristan",
-                    Integer.toString(selectedDay) + "TEST 4",
-                    "This is a test item3",
-                    MealListItem.Meal.BREAKFAST);
-            p.addMeal(testMeal1);
-            p.addMeal(testMeal2);
-            p.addMeal(testMeal3);
-            p.addMeal(testMeal4);
+            //Toast.makeText(getContext(), Integer.toString(selectedDay), Toast.LENGTH_SHORT).show();
+            openAddMealDialog();
         });
 
         return view;
+    }
+
+    public void addMeal(String recipe, MealListItem.Meal mealType) {
+        planDatabase.child(Integer.toString(selectedDay)).child(mealType.toString())
+                .setValue(new MealListItem(
+                        currentUser.getDisplayName(),
+                        recipe,
+                        "",
+                        mealType));
+
+    }
+
+    public void openAddMealDialog() {
+        Log.v(TAG, shortlist.toString());
+        ShortlistDialogFragment dialogFragment = ShortlistDialogFragment.newInstance(shortlist);
+        dialogFragment.show(getFragmentManager(), "ShortlistDialogFragment");
     }
 
     private void setupViewPager(ViewPager viewPager) {

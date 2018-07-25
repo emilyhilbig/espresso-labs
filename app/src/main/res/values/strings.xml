@@ -23,6 +23,7 @@
     <string name="dialog_name_title">Change name</string>
     <string name="dialog_item_title">Add new item</string>
     <string name="dialog_users_title">Online users</string>
+    <string name="dialog_shortlist_title">Add a shortlisted recipe</string>
 
     <string name="notification_title_new_item">New item has been added to the shopping list!</string>
     <string name="notification_body_new_item">%2$s added: %1$s</string>

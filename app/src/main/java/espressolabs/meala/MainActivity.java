@@ -23,6 +23,8 @@ import java.lang.reflect.Field;
 
 import espressolabs.meala.dialog.ItemDialogFragment;
 import espressolabs.meala.dialog.NameDialogFragment;
+import espressolabs.meala.dialog.ShortlistDialogFragment;
+import espressolabs.meala.model.MealListItem;
 import espressolabs.meala.model.RecipeItem;
 
 
@@ -53,7 +55,12 @@ class BottomNavigationViewHelper {
 
 
 public class MainActivity extends AppCompatActivity
-        implements RecipeListFragment.OnRecipeClickListener, NameDialogFragment.NameDialogListener, ItemDialogFragment.ItemDialogListener, PopupMenu.OnMenuItemClickListener {
+        implements RecipeListFragment.OnRecipeClickListener,
+        NameDialogFragment.NameDialogListener,
+        ItemDialogFragment.ItemDialogListener,
+        PopupMenu.OnMenuItemClickListener,
+        ShortlistDialogFragment.ShortlistDialogListener
+{
 
     Fragment mCurFragment;
     Fragment mPrevFragment;
@@ -215,4 +222,11 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    @Override
+    public void onDialogAddItem(String recipe, MealListItem.Meal mealType) {
+        if (recipe != null && mealType != null) {
+            ((PlannerFragment)plannerFragment).addMeal(recipe, mealType);
+        }
+        Log.v("MAIN", recipe + " " + mealType.toString());
+    }
 }
